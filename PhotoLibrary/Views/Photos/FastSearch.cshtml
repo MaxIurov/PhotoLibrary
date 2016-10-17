@@ -1,0 +1,28 @@
+﻿@model IEnumerable<PhotoLibrary.Models.Photo>
+@using PhotoLibrary.Helpers
+<div id="searchresults">
+    @{
+        if (Model.Count() > 0)
+        {
+            <h6>Search results:</h6>
+            <table style="border-collapse: separate; border-spacing: 5px;">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(i => item.Name)
+                        </td>
+                        <td>@Html.DisplayFor(i => item.User.UserName)</td>
+                        <td>@Html.Image(item, 0)</td>
+                        <td>@Html.ActionLink("Open", "ViewPhoto", "Home", new { PhotoID = item.PhotoID }, null)</td>
+                    </tr>
+                }
+            </table>
+            <hr />
+        }
+        else
+        {
+            <h6>Nothing found</h6>
+        }
+    }
+</div>

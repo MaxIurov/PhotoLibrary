@@ -1,0 +1,59 @@
+﻿@model PhotoLibrary.Models.ViewModels.AlbumViewModel
+@using PhotoLibrary.Helpers;
+@{
+    ViewBag.Title = "AddPhoto ";
+}
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(t => t.AlbumID)
+        @Html.HiddenFor(t => t.UserID)
+        @Html.HiddenFor(t => t.CanAddAlbum)
+        @Html.HiddenFor(t => t.CanAddPhoto)
+        @Html.HiddenFor(t => t.Name)
+        @Html.HiddenFor(t => t.Description)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Photos, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @for (int i = 0; i < Model.Photos.Count(); i++)
+                {
+                    <div>
+                        @Html.EditorFor(m => Model.Photos[i].Checked)
+                        @Html.DisplayFor(m => Model.Photos[i].Name)
+                        @Html.HiddenFor(m => Model.Photos[i].Id)
+                        @Html.Image(Model.Photos[i].Name, Model.Photos[i].Image, 1)
+                        @Html.HiddenFor(m => Model.Photos[i].Image)
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add Photo" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<p>
+    @Html.MyLinkButton("Edit", "Edit", "Albums", new { id = Model.AlbumID })
+    @Html.MyLinkButton("Back to List", "Index", "Albums")
+</p>

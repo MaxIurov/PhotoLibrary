@@ -1,0 +1,149 @@
+﻿@model PhotoLibrary.Models.ViewModels.ViewPhotoViewModel
+@using PhotoLibrary.Helpers
+@{
+    ViewBag.Title = "View Photo";
+}
+<h2>View Photo</h2>
+<div id="likeresults">
+    <table>
+        <tr>
+            <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                Likes: @Model.NLikes
+            </td>
+            <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                Dislikes: @Model.NDislikes
+            </td>
+        </tr>
+    </table>
+    @if (Model.CanLike)
+    {
+        using (Ajax.BeginForm("ManageLike", "Home", null, new AjaxOptions { UpdateTargetId = "likeresults", HttpMethod = "Post" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.NLikes)
+            @Html.HiddenFor(m => m.NDislikes)
+            @Html.HiddenFor(m => m.ModelLiked)
+            @Html.HiddenFor(m => m.ModelDisliked)
+            @Html.HiddenFor(m => m.CanLike)
+            @Html.HiddenFor(m => m.PhotoID)
+            @Html.HiddenFor(m => m.UserID)
+            if (!Model.ModelLiked)
+            {
+                <input type="submit" name="button_like" value="Like" />
+            }
+            if (!Model.ModelDisliked)
+            {
+                <input type="submit" name="button_dislike" value="Dislike" />
+            }
+            if (Model.ModelLiked || Model.ModelDisliked)
+            {
+                <input type="submit" name="button_delete" value="Delete" />
+            }
+        }
+    }
+</div>
+
+<div>
+    <dl class="dl-horizontal">
+        @Html.HiddenFor(m => m.PhotoID)
+        @Html.HiddenFor(m => m.UserID)
+        @Html.HiddenFor(m => m.BackToAlbumID)
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @Html.Image(Model.Name, Model.Image, 3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeTakenStr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeTakenStr)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Device)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Device)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Focus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Focus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Aperture)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aperture)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Shutter)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Shutter)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ISO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ISO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Flash)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Flash)
+        </dd>
+    </dl>
+</div>
+<p>
+    @if (ViewBag.UserID == Model.UserID)
+    {
+        @Html.ActionLink("Edit", "Edit", "Photos", new { id = Model.PhotoID }, null)
+    }
+    @if (Model.BackToAlbumID != 0)
+    {
+        @Html.ActionLink("To Album", "Album", new { AlbumID = Model.BackToAlbumID })
+    }
+</p>

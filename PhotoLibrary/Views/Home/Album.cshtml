@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<PhotoLibrary.Models.Photo>
+@using PagedList.Mvc;
+@using PhotoLibrary.Helpers
+@{
+            ViewBag.Title = "Album";
+}
+<h2>Album</h2>
+<hr />
+<table style="border-collapse: separate; border-spacing: 10px;">
+<tr>
+    <th>
+        @Html.Label("User Name")
+    </th>
+    <th>
+        @Html.Label("Album Name")
+    </th>
+    <th>
+        @Html.Label("Album Description")
+    </th>
+</tr>
+    <tr>
+        <td>
+            @ViewBag.UserName
+        </td>
+        <td>
+            @ViewBag.AlbumName
+        </td>
+        <td>
+            @ViewBag.Description
+        </td>
+    </tr>
+</table>
+<h3>Link to this album: @ViewBag.DirectLink</h3>
+<button id="getLink" onclick="copyToClipboard('@ViewBag.DirectLink')">Get Link</button>
+<script>
+  function copyToClipboard(text) {
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+  }
+</script>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <th style="border: 2px solid black; text-align: center; width: 25%">
+                @Html.ActionLink("Photo Name", "Album",
+            new { AlbumID = ViewBag.AlbumID, sortOrder = "Name", CurrentSort = ViewBag.CurrentSort })
+            </th>
+            <th style="border: 2px solid black; text-align: center; width: 20%">
+                @Html.ActionLink("Time Taken", "Album",
+            new { AlbumID = ViewBag.AlbumID, sortOrder = "Time", CurrentSort = ViewBag.CurrentSort })
+            </th>
+            <th style="border: 2px solid black; text-align: center; width: 15%;">
+                @Html.ActionLink("Flash Used", "Album",
+            new { AlbumID = ViewBag.AlbumID, sortOrder = "Flash", CurrentSort = ViewBag.CurrentSort })
+            </th>
+            <th style="border: 2px solid black; text-align: center; width: 30%;">
+                @Html.Label("Image")
+            </th>
+            <th style="border: 2px solid black; text-align: center; width: 10%;">
+            </th>
+
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                    @Html.DisplayFor(modelItem => item.TimeTaken)
+                </td>
+                <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                    @Html.DisplayFor(modelItem => item.Flash)
+                </td>
+                <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                    @Html.Image(item, 1)
+                </td>
+                <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                    @Html.ActionLink("Open", "ViewPhoto", new { PhotoID = item.PhotoID, AlbumID = ViewBag.AlbumID })
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+    <div id='Paging' style="text-align: center">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Album", new { AlbumID = ViewBag.AlbumID, page }))
+    </div>
+}
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

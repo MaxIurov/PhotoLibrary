@@ -1,0 +1,38 @@
+﻿@model PhotoLibrary.Models.ViewModels.AlbumIndexViewModel
+@using PhotoLibrary.Helpers
+@{
+    ViewBag.Title = "Album Page";
+}
+<h2>My Albums</h2>
+<p>
+    @Html.MyLinkButton("Create New Album", "Create", "Albums", Model.CanAddAlbum)
+    @Html.MyLinkButton("Upload New Photo", "Create", "Photos", Model.CanAddPhoto)
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Album Name")
+        </th>
+        <th>
+            @Html.Label("Album Description")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Albums)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(m => item.Name)
+        </td>
+        <td>
+            @Html.DisplayTextFor(m => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.AlbumID }) |
+            @Html.ActionLink("Open", "Open", new { id = item.AlbumID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.AlbumID })
+        </td>
+    </tr>
+}
+</table>

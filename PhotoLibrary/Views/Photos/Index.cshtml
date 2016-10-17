@@ -1,0 +1,44 @@
+﻿@model PhotoLibrary.Models.ViewModels.PhotoIndexViewModel
+@using PhotoLibrary.Helpers
+@{
+    ViewBag.Title = "All My Photos";
+}
+<h2>All My Photos</h2>
+<p>
+    @Html.MyLinkButton("Create New Photo", "Create", "Photos", Model.CanAddPhoto)
+    @Html.MyLinkButton("Go to Albums", "Index", "Albums")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Photo Name")
+        </th>
+        <th>
+            @Html.Label("Image")
+        </th>
+        <th>
+            @Html.Label("Likes/Dislikes")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Photos)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => item.Name)
+            </td>
+            <td>
+                @Html.Image(item.Name,item.Image, 1)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Likes_Dislikes)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.PhotoID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.PhotoID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.PhotoID })
+            </td>
+        </tr>
+    }
+</table>

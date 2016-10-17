@@ -1,0 +1,39 @@
+﻿@model PhotoLibrary.Models.ViewModels.ViewPhotoViewModel
+<div id="likeresults">
+    <table>
+        <tr>
+            <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                Likes: @Model.NLikes
+            </td>
+            <td style="border: 2px solid black; text-align: center; word-wrap: break-word;">
+                Dislikes: @Model.NDislikes
+            </td>
+        </tr>
+    </table>
+    @if (Model.CanLike)
+    {
+        using (Ajax.BeginForm("ManageLike", "Home", null, new AjaxOptions { UpdateTargetId = "likeresults", HttpMethod = "Post" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.NLikes)
+            @Html.HiddenFor(m => m.NDislikes)
+            @Html.HiddenFor(m => m.ModelLiked)
+            @Html.HiddenFor(m => m.ModelDisliked)
+            @Html.HiddenFor(m => m.CanLike)
+            @Html.HiddenFor(m => m.PhotoID)
+            @Html.HiddenFor(m => m.UserID)
+            if (!Model.ModelLiked)
+            {
+                <input type="submit" name="button_like" value="Like" />
+            }
+            if (!Model.ModelDisliked)
+            {
+                <input type="submit" name="button_dislike" value="Dislike" />
+            }
+            if (Model.ModelLiked || Model.ModelDisliked)
+            {
+                <input type="submit" name="button_delete" value="Delete" />
+            }
+        }
+    }
+</div>

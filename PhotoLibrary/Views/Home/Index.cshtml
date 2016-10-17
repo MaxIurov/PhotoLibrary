@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PhotoLibrary.Models.ViewModels.HomeAlbumViewModel>
+@{
+    ViewBag.Title = "Home Page";
+}
+<h2>All Albums</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m => m.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => m.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => m.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => m.NPhotos)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(mi => item.Name)
+            </td>
+            <td>
+                @Html.DisplayTextFor(mi => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(mi => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(mi => item.NPhotos)
+            </td>
+            <td>
+                @Html.ActionLink("Open", "Album", new { AlbumID = item.AlbumID })
+            </td>
+        </tr>
+    }
+</table>
