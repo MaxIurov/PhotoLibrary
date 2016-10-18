@@ -11,8 +11,8 @@ namespace PhotoLibrary.Models.ViewModels
     public class PhotoSearchModel
     {
         public string Name { get; set; }
-        public string TimeFrom{ get; set; }
-        public string TimeTo { get; set; }
+        public DateTime? TimeFrom{ get; set; }
+        public DateTime? TimeTo { get; set; }
         public string Location { get; set; }
         public int? DeviceID { get; set; }
         public IEnumerable<SelectListItem> DeviceList { get; set; }

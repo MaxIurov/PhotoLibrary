@@ -1,0 +1,419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PhotoLibraryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Albums">
+          <Key>
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="AlbumID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+          <Property Name="AlbumSlug" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AlbumToPhotoes">
+          <Key>
+            <PropertyRef Name="AlbumToPhotoID" />
+          </Key>
+          <Property Name="AlbumToPhotoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlbumID" Type="int" Nullable="false" />
+          <Property Name="PhotoID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Devices">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+          </Key>
+          <Property Name="DeviceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="LikePhotoes">
+          <Key>
+            <PropertyRef Name="LikePhotoID" />
+          </Key>
+          <Property Name="LikePhotoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Liked" Type="int" Nullable="false" />
+          <Property Name="PhotoID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="LogMessages">
+          <Key>
+            <PropertyRef Name="LogMessageID" />
+          </Key>
+          <Property Name="LogMessageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Controller" Type="nvarchar(max)" />
+          <Property Name="Action" Type="nvarchar(max)" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="PhotoID" />
+          </Key>
+          <Property Name="PhotoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Image" Type="varbinary(max)" />
+          <Property Name="TimeTaken" Type="datetime" />
+          <Property Name="Location" Type="nvarchar(max)" />
+          <Property Name="DeviceID" Type="int" />
+          <Property Name="Focus" Type="int" />
+          <Property Name="Aperture" Type="nvarchar(max)" />
+          <Property Name="Shutter" Type="nvarchar(max)" />
+          <Property Name="ISO" Type="nvarchar(max)" />
+          <Property Name="Flash" Type="bit" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="Settings">
+          <Key>
+            <PropertyRef Name="SettingsID" />
+          </Key>
+          <Property Name="SettingsID" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID">
+          <End Role="Albums" Type="Self.Albums" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AlbumToPhotoes" Type="Self.AlbumToPhotoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumID" />
+            </Principal>
+            <Dependent Role="AlbumToPhotoes">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AlbumToPhotoes" Type="Self.AlbumToPhotoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="PhotoID" />
+            </Principal>
+            <Dependent Role="AlbumToPhotoes">
+              <PropertyRef Name="PhotoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_LikePhotoes_dbo_Photos_PhotoID">
+          <End Role="Photos" Type="Self.Photos" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LikePhotoes" Type="Self.LikePhotoes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="PhotoID" />
+            </Principal>
+            <Dependent Role="LikePhotoes">
+              <PropertyRef Name="PhotoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Photos_dbo_Devices_DeviceID">
+          <End Role="Devices" Type="Self.Devices" Multiplicity="0..1" />
+          <End Role="Photos" Type="Self.Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="DeviceID" />
+            </Principal>
+            <Dependent Role="Photos">
+              <PropertyRef Name="DeviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PhotoLibraryModelStoreContainer">
+          <EntitySet Name="Albums" EntityType="Self.Albums" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AlbumToPhotoes" EntityType="Self.AlbumToPhotoes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Devices" EntityType="Self.Devices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LikePhotoes" EntityType="Self.LikePhotoes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LogMessages" EntityType="Self.LogMessages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Photos" EntityType="Self.Photos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Settings" EntityType="Self.Settings" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID" Association="Self.FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="AlbumToPhotoes" EntitySet="AlbumToPhotoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID" Association="Self.FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="AlbumToPhotoes" EntitySet="AlbumToPhotoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_LikePhotoes_dbo_Photos_PhotoID" Association="Self.FK_dbo_LikePhotoes_dbo_Photos_PhotoID">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="LikePhotoes" EntitySet="LikePhotoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Photos_dbo_Devices_DeviceID" Association="Self.FK_dbo_Photos_dbo_Devices_DeviceID">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="Photos" EntitySet="Photos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PhotoLibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="AlbumID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AlbumSlug" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AlbumToPhotoes" Relationship="Self.FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID" FromRole="Albums" ToRole="AlbumToPhotoes" />
+        </EntityType>
+        <EntityType Name="AlbumToPhoto">
+          <Key>
+            <PropertyRef Name="AlbumToPhotoID" />
+          </Key>
+          <Property Name="AlbumToPhotoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlbumID" Type="Int32" Nullable="false" />
+          <Property Name="PhotoID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Album" Relationship="Self.FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID" FromRole="AlbumToPhotoes" ToRole="Albums" />
+          <NavigationProperty Name="Photo" Relationship="Self.FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID" FromRole="AlbumToPhotoes" ToRole="Photos" />
+        </EntityType>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+          </Key>
+          <Property Name="DeviceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Photos" Relationship="Self.FK_dbo_Photos_dbo_Devices_DeviceID" FromRole="Devices" ToRole="Photos" />
+        </EntityType>
+        <EntityType Name="LikePhoto">
+          <Key>
+            <PropertyRef Name="LikePhotoID" />
+          </Key>
+          <Property Name="LikePhotoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Liked" Type="Int32" Nullable="false" />
+          <Property Name="PhotoID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Photo" Relationship="Self.FK_dbo_LikePhotoes_dbo_Photos_PhotoID" FromRole="LikePhotoes" ToRole="Photos" />
+        </EntityType>
+        <EntityType Name="LogMessage">
+          <Key>
+            <PropertyRef Name="LogMessageID" />
+          </Key>
+          <Property Name="LogMessageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Controller" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Photo">
+          <Key>
+            <PropertyRef Name="PhotoID" />
+          </Key>
+          <Property Name="PhotoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="TimeTaken" Type="DateTime" Precision="3" />
+          <Property Name="Location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeviceID" Type="Int32" />
+          <Property Name="Focus" Type="Int32" />
+          <Property Name="Aperture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Shutter" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ISO" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Flash" Type="Boolean" />
+          <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AlbumToPhotoes" Relationship="Self.FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID" FromRole="Photos" ToRole="AlbumToPhotoes" />
+          <NavigationProperty Name="Device" Relationship="Self.FK_dbo_Photos_dbo_Devices_DeviceID" FromRole="Photos" ToRole="Devices" />
+          <NavigationProperty Name="LikePhotoes" Relationship="Self.FK_dbo_LikePhotoes_dbo_Photos_PhotoID" FromRole="Photos" ToRole="LikePhotoes" />
+        </EntityType>
+        <EntityType Name="Setting">
+          <Key>
+            <PropertyRef Name="SettingsID" />
+          </Key>
+          <Property Name="SettingsID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID">
+          <End Role="Albums" Type="Self.Album" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AlbumToPhotoes" Type="Self.AlbumToPhoto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumID" />
+            </Principal>
+            <Dependent Role="AlbumToPhotoes">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID">
+          <End Role="Photos" Type="Self.Photo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AlbumToPhotoes" Type="Self.AlbumToPhoto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="PhotoID" />
+            </Principal>
+            <Dependent Role="AlbumToPhotoes">
+              <PropertyRef Name="PhotoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Photos_dbo_Devices_DeviceID">
+          <End Role="Devices" Type="Self.Device" Multiplicity="0..1" />
+          <End Role="Photos" Type="Self.Photo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="DeviceID" />
+            </Principal>
+            <Dependent Role="Photos">
+              <PropertyRef Name="DeviceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_LikePhotoes_dbo_Photos_PhotoID">
+          <End Role="Photos" Type="Self.Photo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="LikePhotoes" Type="Self.LikePhoto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Photos">
+              <PropertyRef Name="PhotoID" />
+            </Principal>
+            <Dependent Role="LikePhotoes">
+              <PropertyRef Name="PhotoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PhotoLibraryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Albums" EntityType="Self.Album" />
+          <EntitySet Name="AlbumToPhotoes" EntityType="Self.AlbumToPhoto" />
+          <EntitySet Name="Devices" EntityType="Self.Device" />
+          <EntitySet Name="LikePhotoes" EntityType="Self.LikePhoto" />
+          <EntitySet Name="LogMessages" EntityType="Self.LogMessage" />
+          <EntitySet Name="Photos" EntityType="Self.Photo" />
+          <EntitySet Name="Settings" EntityType="Self.Setting" />
+          <AssociationSet Name="FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID" Association="Self.FK_dbo_AlbumToPhotoes_dbo_Albums_AlbumID">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="AlbumToPhotoes" EntitySet="AlbumToPhotoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID" Association="Self.FK_dbo_AlbumToPhotoes_dbo_Photos_PhotoID">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="AlbumToPhotoes" EntitySet="AlbumToPhotoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Photos_dbo_Devices_DeviceID" Association="Self.FK_dbo_Photos_dbo_Devices_DeviceID">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="Photos" EntitySet="Photos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_LikePhotoes_dbo_Photos_PhotoID" Association="Self.FK_dbo_LikePhotoes_dbo_Photos_PhotoID">
+            <End Role="Photos" EntitySet="Photos" />
+            <End Role="LikePhotoes" EntitySet="LikePhotoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PhotoLibraryModelStoreContainer" CdmEntityContainer="PhotoLibraryEntities">
+          <EntitySetMapping Name="Albums">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.Album">
+              <MappingFragment StoreEntitySet="Albums">
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="AlbumSlug" ColumnName="AlbumSlug" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AlbumToPhotoes">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.AlbumToPhoto">
+              <MappingFragment StoreEntitySet="AlbumToPhotoes">
+                <ScalarProperty Name="AlbumToPhotoID" ColumnName="AlbumToPhotoID" />
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Devices">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.Device">
+              <MappingFragment StoreEntitySet="Devices">
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LikePhotoes">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.LikePhoto">
+              <MappingFragment StoreEntitySet="LikePhotoes">
+                <ScalarProperty Name="LikePhotoID" ColumnName="LikePhotoID" />
+                <ScalarProperty Name="Liked" ColumnName="Liked" />
+                <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LogMessages">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.LogMessage">
+              <MappingFragment StoreEntitySet="LogMessages">
+                <ScalarProperty Name="LogMessageID" ColumnName="LogMessageID" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Photos">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.Photo">
+              <MappingFragment StoreEntitySet="Photos">
+                <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="TimeTaken" ColumnName="TimeTaken" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="Focus" ColumnName="Focus" />
+                <ScalarProperty Name="Aperture" ColumnName="Aperture" />
+                <ScalarProperty Name="Shutter" ColumnName="Shutter" />
+                <ScalarProperty Name="ISO" ColumnName="ISO" />
+                <ScalarProperty Name="Flash" ColumnName="Flash" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Settings">
+            <EntityTypeMapping TypeName="PhotoLibraryModel.Setting">
+              <MappingFragment StoreEntitySet="Settings">
+                <ScalarProperty Name="SettingsID" ColumnName="SettingsID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

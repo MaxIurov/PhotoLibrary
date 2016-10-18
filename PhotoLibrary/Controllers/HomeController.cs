@@ -165,7 +165,7 @@ namespace PhotoLibrary.Controllers
             vp.UserName = photo.User.UserName;
             vp.Name = photo.Name;
             vp.Image = photo.Image;
-            vp.TimeTakenStr = photo.TimeTaken.ToString();
+            vp.TimeTaken = photo.TimeTaken;
             vp.Location = photo.Location;
             vp.Device = photo.Device.Name;
             vp.Focus = photo.Focus;

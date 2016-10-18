@@ -1,9 +1,10 @@
 ﻿@model Nullable<DateTime>
 @{
-    DateTime dt = DateTime.Now;
+    string strdt = "";
     if (Model != null)
     {
-        dt = (System.DateTime)Model;
+        strdt = Model.GetValueOrDefault(DateTime.Now).ToShortDateString();
     }
-    @Html.TextBox("", String.Format("{0:dd.MM.yyyy}", dt), new { @class = "date-picker", type = "text" })
+    @Html.TextBox("", strdt, new { @class = "date-picker", type = "text" })
+    @*@Html.TextBox("", dt, new { @class = "date-picker", type = "text" });*@
 }

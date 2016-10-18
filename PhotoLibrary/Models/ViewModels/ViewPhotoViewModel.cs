@@ -16,7 +16,7 @@ namespace PhotoLibrary.Models.ViewModels
         [Display(Name = "Photo")]
         public byte[] Image { get; set; }
         [Display(Name = "Time Taken")]
-        public string TimeTakenStr { get; set; }
+        public DateTime? TimeTaken { get; set; }
         public string Location { get; set; }
         public string Device { get; set; }
         public int? Focus { get; set; }

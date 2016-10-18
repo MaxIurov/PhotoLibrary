@@ -38,7 +38,7 @@ namespace PhotoLibrary.Controllers
                 int nDislikes = await db.LikePhotos.Where(x => x.PhotoID == item.PhotoID).Where(x => x.Liked == -1).CountAsync();
                 string l_d = nLikes.ToString() + "/" + nDislikes.ToString();
                 PhotoSmallViewModel psvm = new PhotoSmallViewModel
-                { PhotoID = item.PhotoID,Name=item.Name,Image=item.Image,Likes_Dislikes=l_d };
+                { PhotoID = item.PhotoID, Name = item.Name, Image = item.Image, Likes_Dislikes = l_d };
                 lpsvm.Add(psvm);
             }
             pivm.Photos = lpsvm;
@@ -173,19 +173,6 @@ namespace PhotoLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(PhotoViewModel photovm)
         {
-            //DateTime? tt = null;
-            //if (!string.IsNullOrEmpty(photovm.TimeTakenStr))
-            //{
-            //    try
-            //    {
-            //        //tt = DateTime.ParseExact(photovm.TimeTakenStr, "dd.MM.yyyy H:mm:ss", CultureInfo.InvariantCulture);
-            //        tt = DateTime.Parse(photovm.TimeTakenStr);
-            //    }
-            //    catch
-            //    {
-            //        ModelState.AddModelError("", "Wrong Date input.");
-            //    }
-            //}
             Photo photo = new Photo();
             photo.PhotoID = photovm.PhotoID;
             photo.Name = photovm.Name;
@@ -285,6 +272,8 @@ namespace PhotoLibrary.Controllers
             PhotoSearchModel model = new PhotoSearchModel();
             model.DeviceList = sl;
             model.DeviceID = devID;
+            //model.TimeFrom = null;
+            //model.TimeTo = null;
             return View(model);
         }
         [AllowAnonymous]
@@ -309,7 +298,6 @@ namespace PhotoLibrary.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> AllSearch(PhotoSearchModel m)
         {
-            bool gogogo = true;
             string usrid = "Guest";
             if (User.Identity.IsAuthenticated)
             {
@@ -320,50 +308,21 @@ namespace PhotoLibrary.Controllers
             m.DeviceList = sl;
             string searchName = "";
             if (!string.IsNullOrWhiteSpace(m.Name)) searchName = m.Name;
-            DateTime? tFrom = null;
-            if (!string.IsNullOrEmpty(m.TimeFrom))
-            {
-                try
-                {
-                    tFrom = DateTime.Parse(m.TimeFrom);
-                }
-                catch
-                {
-                    gogogo = false;
-                    ModelState.AddModelError("", "Wrong Date From input.");
-                }
-            }
-            DateTime? tTo = null;
-            if (!string.IsNullOrEmpty(m.TimeTo))
-            {
-                try
-                {
-                    tTo = DateTime.Parse(m.TimeTo);
-                }
-                catch
-                {
-                    gogogo = false;
-                    ModelState.AddModelError("", "Wrong Date To input.");
-                }
-            }
-            if (gogogo)
-            {
-                List<Photo> results = await (from p in db.Photos
-                                             join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID into pGroup
-                                             from p_ap in pGroup.DefaultIfEmpty()
-                                             where ((p.UserID == usrid) | (p_ap != null)) &
-                                             (p.Name.Contains(searchName)) &
-                                             ((p.TimeTaken >= tFrom) | (tFrom == null)) & ((p.TimeTaken <= tTo) | (tTo == null)) &
-                                             ((p.Location.Contains(m.Location)) | (m.Location == null) | (m.Location == "")) &
-                                             ((p.DeviceID == m.DeviceID) | (p.DeviceID == 1)) &
-                                             ((p.Focus == m.Focus) | (m.Focus == null)) &
-                                             ((p.Aperture == m.Aperture) | (m.Aperture == null) | (m.Aperture == "")) &
-                                             ((p.Shutter == m.Shutter) | (m.Shutter == null) | (m.Shutter == "")) &
-                                             ((p.ISO == m.ISO) | (m.ISO == null) | (m.ISO == "")) &
-                                             ((p.Flash == m.Flash) | (m.Flash == null))
-                                             select p).Distinct().ToListAsync();
-                m.SearchResults = results;
-            }
+            List<Photo> results = await (from p in db.Photos
+                                         join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID into pGroup
+                                         from p_ap in pGroup.DefaultIfEmpty()
+                                         where ((p.UserID == usrid) | (p_ap != null)) &
+                                         (p.Name.Contains(searchName)) &
+                                         ((p.TimeTaken >= m.TimeFrom) | (m.TimeFrom == null)) & ((p.TimeTaken <= m.TimeTo) | (m.TimeTo == null)) &
+                                         ((p.Location.Contains(m.Location)) | (m.Location == null) | (m.Location == "")) &
+                                         ((p.DeviceID == m.DeviceID) | (m.DeviceID == 1)) &
+                                         ((p.Focus == m.Focus) | (m.Focus == null)) &
+                                         ((p.Aperture == m.Aperture) | (m.Aperture == null) | (m.Aperture == "")) &
+                                         ((p.Shutter == m.Shutter) | (m.Shutter == null) | (m.Shutter == "")) &
+                                         ((p.ISO == m.ISO) | (m.ISO == null) | (m.ISO == "")) &
+                                         ((p.Flash == m.Flash) | (m.Flash == null))
+                                         select p).Distinct().ToListAsync();
+            m.SearchResults = results;
             return View("PhotoSearch", m);
         }
         [AllowAnonymous]
