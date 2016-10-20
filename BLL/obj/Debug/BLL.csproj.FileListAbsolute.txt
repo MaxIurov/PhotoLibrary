@@ -1,0 +1,4 @@
+C:\_MyProjects\PhotoLibrary\BLL\bin\Debug\BLL.dll
+C:\_MyProjects\PhotoLibrary\BLL\bin\Debug\BLL.pdb
+C:\_MyProjects\PhotoLibrary\BLL\obj\Debug\BLL.dll
+C:\_MyProjects\PhotoLibrary\BLL\obj\Debug\BLL.pdb

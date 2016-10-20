@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{14F728EA-F0E5-44EC-B0C8-35A453837AE9}</ProjectGuid>
+    <ProjectGuid>{F7C55BE7-5FAB-48F5-89D8-78BBE8F8AF26}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BOL</RootNamespace>
@@ -51,71 +51,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Album.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AlbumToPhoto.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Device.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LikePhoto.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LogMessage.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Photo.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PhotoLibraryModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PhotoLibraryModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PhotoLibraryModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PhotoLibraryModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PhotoLibraryModel.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="Album.cs" />
+    <Compile Include="AlbumToPhoto.cs" />
+    <Compile Include="AspNetRole.cs" />
+    <Compile Include="AspNetUser.cs" />
+    <Compile Include="AspNetUserClaim.cs" />
+    <Compile Include="AspNetUserLogin.cs" />
+    <Compile Include="Device.cs" />
+    <Compile Include="LikePhoto.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="Photo.cs" />
+    <Compile Include="PhotoLibraryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Setting.cs">
-      <DependentUpon>PhotoLibraryModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Setting.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="PhotoLibraryModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>PhotoLibraryModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="PhotoLibraryModel.edmx.diagram">
-      <DependentUpon>PhotoLibraryModel.edmx</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="PhotoLibraryModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PhotoLibraryModel.edmx</DependentUpon>
-      <LastGenOutput>PhotoLibraryModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="PhotoLibraryModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>PhotoLibraryModel.edmx</DependentUpon>
-      <LastGenOutput>PhotoLibraryModel.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

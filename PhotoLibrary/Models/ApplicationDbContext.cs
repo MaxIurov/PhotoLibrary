@@ -22,11 +22,9 @@ namespace PhotoLibrary.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Photo>().HasMany<Album>(p => p.Albums).WithMany(a => a.Photos).
-            //    Map(ap => { ap.MapLeftKey("PhotoID"); ap.MapRightKey("AlbumID"); ap.ToTable("AlbumPhoto"); });
             base.OnModelCreating(modelBuilder);
         }
-        public ApplicationDbContext():base("DefaultConnection", throwIfV1Schema: false)
+        public ApplicationDbContext():base("LibraryConnection", throwIfV1Schema: false)
         {
         }
         public static ApplicationDbContext Create()

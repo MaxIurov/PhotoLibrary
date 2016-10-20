@@ -1,0 +1,4 @@
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\DAL.dll
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\DAL.pdb
+C:\_MyProjects\PhotoLibrary\DAL\obj\Debug\DAL.dll
+C:\_MyProjects\PhotoLibrary\DAL\obj\Debug\DAL.pdb

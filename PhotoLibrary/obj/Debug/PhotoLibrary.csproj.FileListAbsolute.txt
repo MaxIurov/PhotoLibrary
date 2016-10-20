@@ -575,6 +575,6 @@ C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\ru\FluentValidation.resources.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\sv\FluentValidation.resources.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\tr\FluentValidation.resources.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\zh-CN\FluentValidation.resources.dll
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.csprojResolveAssemblyReference.cache
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.pdb
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.csprojResolveAssemblyReference.cache
