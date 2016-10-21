@@ -2,3 +2,8 @@ C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\DAL.dll
 C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\DAL.pdb
 C:\_MyProjects\PhotoLibrary\DAL\obj\Debug\DAL.dll
 C:\_MyProjects\PhotoLibrary\DAL\obj\Debug\DAL.pdb
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL.dll
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\EntityFramework.dll
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL.pdb
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\EntityFramework.xml
+C:\_MyProjects\PhotoLibrary\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache

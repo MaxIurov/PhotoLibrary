@@ -7,11 +7,9 @@ namespace BOL
 
     public partial class PhotoLibraryModel : DbContext
     {
-        public PhotoLibraryModel()
-            : base("name=PhotoLibraryConnection")
+        public PhotoLibraryModel():base("name=PhotoLibraryConnection")
         {
         }
-
         public virtual DbSet<Album> Albums { get; set; }
         public virtual DbSet<AlbumToPhoto> AlbumToPhotoes { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
@@ -55,6 +53,12 @@ namespace BOL
                 .HasMany(e => e.Photos)
                 .WithOptional(e => e.AspNetUser)
                 .HasForeignKey(e => e.UserID);
+
+            base.OnModelCreating(modelBuilder);
+        }
+        public static PhotoLibraryModel Create()
+        {
+            return new PhotoLibraryModel();
         }
     }
 }

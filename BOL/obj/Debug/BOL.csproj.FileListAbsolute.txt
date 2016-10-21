@@ -3,3 +3,8 @@ C:\_MyProjects\PhotoLibrary\BOL\bin\Debug\BOL.pdb
 C:\_MyProjects\PhotoLibrary\BOL\obj\Debug\BOL.csprojResolveAssemblyReference.cache
 C:\_MyProjects\PhotoLibrary\BOL\obj\Debug\BOL.dll
 C:\_MyProjects\PhotoLibrary\BOL\obj\Debug\BOL.pdb
+C:\_MyProjects\PhotoLibrary\BOL\bin\Debug\BOL.dll.config
+C:\_MyProjects\PhotoLibrary\BOL\bin\Debug\EntityFramework.dll
+C:\_MyProjects\PhotoLibrary\BOL\bin\Debug\EntityFramework.SqlServer.dll
+C:\_MyProjects\PhotoLibrary\BOL\bin\Debug\EntityFramework.xml
+C:\_MyProjects\PhotoLibrary\BOL\bin\Debug\EntityFramework.SqlServer.xml
