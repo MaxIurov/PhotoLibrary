@@ -24,7 +24,7 @@ namespace PhotoLibrary.Models
         {
             base.OnModelCreating(modelBuilder);
         }
-        public ApplicationDbContext():base("LibraryConnection", throwIfV1Schema: false)
+        public ApplicationDbContext():base("PhotoLibraryConnection", throwIfV1Schema: false)
         {
         }
         public static ApplicationDbContext Create()

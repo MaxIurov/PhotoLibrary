@@ -13,40 +13,57 @@ using PhotoLibrary.Common;
 using PhotoLibrary.Models.ViewModels;
 using PagedList;
 
+using BLL;
+
 namespace PhotoLibrary.Controllers
 {
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private HomeBs objBs = new HomeBs();
         public async Task<ActionResult> Index()
         {
             ViewBag.Message = "Home page.";
-            var alb = await (from a in db.Albums
-                             join ap in db.AlbumsToPhotos on a.AlbumID equals ap.AlbumID
-                             group ap by new { a.AlbumID, a.Name, a.Description, a.UserID, a.User.UserName } into g
-                             select new
-                             {
-                                 AlbumID = g.Key.AlbumID,
-                                 Name = g.Key.Name,
-                                 Description = g.Key.Description,
-                                 UserID = g.Key.UserID,
-                                 UserName = g.Key.UserName,
-                                 NPhotos = g.Count()
-                             }).ToListAsync();
-            List<HomeAlbumViewModel> lhavm = new List<HomeAlbumViewModel>();
-            foreach (var item in alb)
-            {
-                lhavm.Add(new HomeAlbumViewModel
-                {
-                    AlbumID = item.AlbumID,
-                    Name = item.Name,
-                    Description = item.Description,
-                    UserID = item.UserID,
-                    UserName = item.UserName,
-                    NPhotos = item.NPhotos
-                });
-            }
-            return View(lhavm);
+            //var alb = await (from a in db.Albums
+            //                 join ap in db.AlbumsToPhotos on a.AlbumID equals ap.AlbumID
+            //                 group ap by new { a.AlbumID, a.Name, a.Description, a.UserID, a.User.UserName } into g
+            //                 select new
+            //                 {
+            //                     AlbumID = g.Key.AlbumID,
+            //                     Name = g.Key.Name,
+            //                     Description = g.Key.Description,
+            //                     UserID = g.Key.UserID,
+            //                     UserName = g.Key.UserName,
+            //                     NPhotos = g.Count()
+            //                 }).ToListAsync();
+            //List<HomeAlbumViewModel> lhavm = new List<HomeAlbumViewModel>();
+            //foreach (var item in alb)
+            //{
+            //    lhavm.Add(new HomeAlbumViewModel
+            //    {
+            //        AlbumID = item.AlbumID,
+            //        Name = item.Name,
+            //        Description = item.Description,
+            //        UserID = item.UserID,
+            //        UserName = item.UserName,
+            //        NPhotos = item.NPhotos
+            //    });
+            //}
+            //List<HomeAlbumViewModel> lhavm = new List<HomeAlbumViewModel>();
+            List<AlbumNotEmptyBs> lstAlb = await objBs.GetNotEmptyAlbums();
+            //foreach (var item in lstAlb)
+            //{
+            //    lhavm.Add(new HomeAlbumViewModel
+            //    {
+            //        AlbumID = item.AlbumID,
+            //        Name = item.Name,
+            //        Description = item.Description,
+            //        UserID = item.UserID,
+            //        UserName = item.UserName,
+            //        NPhotos = item.NPhotos
+            //    });
+            //}
+            return View(lstAlb);
         }
         public ActionResult About()
         {

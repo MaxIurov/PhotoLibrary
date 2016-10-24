@@ -1,4 +1,4 @@
-﻿using BOL;
+﻿using BOL3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +23,32 @@ namespace DAL
         {
             return await db.Albums.FindAsync(id);
         }
+        public void Insert(Album a)
+        {
+            db.Albums.Add(a);
+            Save();
+        }
+        public async void Delete(int id)
+        {
+            Album a = await db.Albums.FindAsync(id);
+            db.Albums.Remove(a);
+            Save();
+        }
+        public void Update(Album a)
+        {
+            db.Entry(a).State = EntityState.Modified;
+            Save();
+        }
         public async void Save()
         {
             await db.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<Album>> GetNotEmpty()
+        {
+            return await (from a in db.Albums
+                          join ap in db.AlbumToPhotoes on a.AlbumID equals ap.AlbumID
+                          select a).Distinct().ToListAsync();
+            //return await db.Albums.ToListAsync();
         }
     }
 }

@@ -7,3 +7,12 @@ C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\EntityFramework.dll
 C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL.pdb
 C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\EntityFramework.xml
 C:\_MyProjects\PhotoLibrary\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\DAL.dll.config
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\EntityFramework.SqlServer.dll
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\EntityFramework.SqlServer.xml
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL2.dll
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL2.pdb
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\PhotoLibrary.mdf
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\PhotoLibrary_log.ldf
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL3.dll
+C:\_MyProjects\PhotoLibrary\DAL\bin\Debug\BOL3.pdb

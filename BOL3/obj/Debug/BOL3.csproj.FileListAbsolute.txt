@@ -1,0 +1,12 @@
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\PhotoLibrary.mdf
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\PhotoLibrary_log.ldf
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.dll
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.SqlServer.dll
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.xml
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.SqlServer.xml
+C:\_MyProjects\PhotoLibrary\BOL3\obj\Debug\BOL3.csprojResolveAssemblyReference.cache
+C:\_MyProjects\PhotoLibrary\BOL3\obj\Debug\BOL3.dll
+C:\_MyProjects\PhotoLibrary\BOL3\obj\Debug\BOL3.pdb
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\BOL3.dll.config
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\BOL3.dll
+C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\BOL3.pdb

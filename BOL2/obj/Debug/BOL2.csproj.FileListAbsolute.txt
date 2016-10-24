@@ -1,0 +1,10 @@
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\BOL2.dll.config
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\BOL2.dll
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\BOL2.pdb
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\EntityFramework.dll
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\EntityFramework.SqlServer.dll
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\EntityFramework.xml
+C:\_MyProjects\PhotoLibrary\BOL2\bin\Debug\EntityFramework.SqlServer.xml
+C:\_MyProjects\PhotoLibrary\BOL2\obj\Debug\BOL2.dll
+C:\_MyProjects\PhotoLibrary\BOL2\obj\Debug\BOL2.pdb
+C:\_MyProjects\PhotoLibrary\BOL2\obj\Debug\BOL2.csprojResolveAssemblyReference.cache

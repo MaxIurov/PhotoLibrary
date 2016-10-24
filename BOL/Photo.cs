@@ -18,7 +18,7 @@ namespace BOL
         public int PhotoID { get; set; }
 
         public string Name { get; set; }
-
+        [Display(Name = "Photo")]
         public byte[] Image { get; set; }
 
         public DateTime? TimeTaken { get; set; }

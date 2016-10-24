@@ -1,4 +1,4 @@
-﻿using BOL;
+﻿using BOL3;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +31,7 @@ namespace DAL
         public async void Delete(int id)
         {
             Photo p = await db.Photos.FindAsync(id);
+            db.Photos.Remove(p);
             Save();
         }
         public void Update(Photo p)

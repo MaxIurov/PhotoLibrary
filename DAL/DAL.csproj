@@ -54,6 +54,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BOL2\BOL2.csproj">
+      <Project>{e98c7861-76e4-4e57-943e-2d1621391994}</Project>
+      <Name>BOL2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BOL3\BOL3.csproj">
+      <Project>{2227b786-e573-4cfb-be31-a63c82c0a640}</Project>
+      <Name>BOL3</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BOL\BOL.csproj">
       <Project>{f7c55be7-5fab-48f5-89d8-78bbe8f8af26}</Project>
       <Name>BOL</Name>

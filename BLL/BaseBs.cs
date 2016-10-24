@@ -9,9 +9,11 @@ namespace BLL
     public class BaseBs
     {
         public PhotoBs photoBs { get; set; }
+        public AlbumBs albumBs { get; set; }
         public BaseBs()
         {
             photoBs = new PhotoBs();
+            albumBs = new AlbumBs();
         }
     }
 }
