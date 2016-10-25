@@ -1,5 +1,5 @@
 ﻿using DAL;
-using BOL3;
+using BOL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +38,10 @@ namespace BLL
         public async Task<IEnumerable<Album>> GetNotEmpty()
         {
             return await objDb.GetNotEmpty();
+        }
+        public async Task<Album> GetBySlug(string slug)
+        {
+            return await objDb.GetBySlug(slug);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using DAL;
-using BOL3;
+using BOL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +34,10 @@ namespace BLL
         public void Update(Photo p)
         {
             objDb.Update(p);
+        }
+        public async Task<IEnumerable<Photo>> GetByAlbumID(int id)
+        {
+            return await objDb.GetByAlbumID(id);
         }
     }
 }

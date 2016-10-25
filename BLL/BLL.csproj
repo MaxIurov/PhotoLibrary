@@ -30,7 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,29 +50,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumBs.cs" />
-    <Compile Include="AlbumNotEmptyBs.cs" />
+    <Compile Include="Home\AlbumNotEmptyBs.cs" />
     <Compile Include="BaseBs.cs" />
-    <Compile Include="HomeBs.cs" />
+    <Compile Include="Home\HomeBs.cs" />
+    <Compile Include="Home\PhotoViewBs.cs" />
     <Compile Include="PhotoBs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserBs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BOL2\BOL2.csproj">
-      <Project>{e98c7861-76e4-4e57-943e-2d1621391994}</Project>
-      <Name>BOL2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BOL3\BOL3.csproj">
+    <ProjectReference Include="..\BOL3\BOL.csproj">
       <Project>{2227b786-e573-4cfb-be31-a63c82c0a640}</Project>
-      <Name>BOL3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BOL\BOL.csproj">
-      <Project>{f7c55be7-5fab-48f5-89d8-78bbe8f8af26}</Project>
       <Name>BOL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{dd5efa9e-f4d6-4d2d-a90c-0eef48636a36}</Project>
       <Name>DAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

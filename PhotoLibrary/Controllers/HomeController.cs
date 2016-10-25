@@ -24,46 +24,8 @@ namespace PhotoLibrary.Controllers
         public async Task<ActionResult> Index()
         {
             ViewBag.Message = "Home page.";
-            //var alb = await (from a in db.Albums
-            //                 join ap in db.AlbumsToPhotos on a.AlbumID equals ap.AlbumID
-            //                 group ap by new { a.AlbumID, a.Name, a.Description, a.UserID, a.User.UserName } into g
-            //                 select new
-            //                 {
-            //                     AlbumID = g.Key.AlbumID,
-            //                     Name = g.Key.Name,
-            //                     Description = g.Key.Description,
-            //                     UserID = g.Key.UserID,
-            //                     UserName = g.Key.UserName,
-            //                     NPhotos = g.Count()
-            //                 }).ToListAsync();
-            //List<HomeAlbumViewModel> lhavm = new List<HomeAlbumViewModel>();
-            //foreach (var item in alb)
-            //{
-            //    lhavm.Add(new HomeAlbumViewModel
-            //    {
-            //        AlbumID = item.AlbumID,
-            //        Name = item.Name,
-            //        Description = item.Description,
-            //        UserID = item.UserID,
-            //        UserName = item.UserName,
-            //        NPhotos = item.NPhotos
-            //    });
-            //}
-            //List<HomeAlbumViewModel> lhavm = new List<HomeAlbumViewModel>();
-            List<AlbumNotEmptyBs> lstAlb = await objBs.GetNotEmptyAlbums();
-            //foreach (var item in lstAlb)
-            //{
-            //    lhavm.Add(new HomeAlbumViewModel
-            //    {
-            //        AlbumID = item.AlbumID,
-            //        Name = item.Name,
-            //        Description = item.Description,
-            //        UserID = item.UserID,
-            //        UserName = item.UserName,
-            //        NPhotos = item.NPhotos
-            //    });
-            //}
-            return View(lstAlb);
+            IEnumerable<AlbumNotEmptyBs> AlbumsWithPhotoes = await objBs.GetNotEmptyAlbums();
+            return View(AlbumsWithPhotoes);
         }
         public ActionResult About()
         {
@@ -83,7 +45,7 @@ namespace PhotoLibrary.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Album album = await db.Albums.FindAsync(AlbumID);
+            BOL.Album album = await objBs.albumBs.GetByID(AlbumID.Value);
             if (album == null)
             {
                 return HttpNotFound();
@@ -94,49 +56,43 @@ namespace PhotoLibrary.Controllers
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
 
             ViewBag.CurrentSort = sortOrder;
-
             sortOrder = String.IsNullOrEmpty(sortOrder) ? "Name" : sortOrder;
-
-            var PhotoList = await (from p in db.Photos
-                                   join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID
-                                   where (ap.AlbumID == album.AlbumID)
-                                   select p).Distinct().ToListAsync();
-            List<Photo> lp = new List<Photo>(PhotoList);
-            IPagedList<Photo> pg_photo = null;
+            IEnumerable<BOL.Photo> Photos= await objBs.photoBs.GetByAlbumID(AlbumID.Value);
+            IPagedList<BOL.Photo> pg_photo = null;
             switch (sortOrder)
             {
                 case "Name":
                     if (sortOrder.Equals(CurrentSort))
-                        pg_photo = lp.OrderByDescending
+                        pg_photo = Photos.OrderByDescending
                                 (m => m.Name).ToPagedList(pageIndex, pageSize);
                     else
-                        pg_photo = lp.OrderBy
+                        pg_photo = Photos.OrderBy
                                 (m => m.Name).ToPagedList(pageIndex, pageSize);
                     break;
                 case "Time":
                     if (sortOrder.Equals(CurrentSort))
-                        pg_photo = lp.OrderByDescending
+                        pg_photo = Photos.OrderByDescending
                                 (m => m.TimeTaken).ToPagedList(pageIndex, pageSize);
                     else
-                        pg_photo = lp.OrderBy
+                        pg_photo = Photos.OrderBy
                                 (m => m.TimeTaken).ToPagedList(pageIndex, pageSize);
                     break;
                 case "Flash":
                     if (sortOrder.Equals(CurrentSort))
-                        pg_photo = lp.OrderByDescending
+                        pg_photo = Photos.OrderByDescending
                                 (m => m.Flash).ToPagedList(pageIndex, pageSize);
                     else
-                        pg_photo = lp.OrderBy
+                        pg_photo = Photos.OrderBy
                                 (m => m.Flash).ToPagedList(pageIndex, pageSize);
                     break;
 
                 case "Default":
-                    pg_photo = lp.OrderBy
+                    pg_photo = Photos.OrderBy
                             (m => m.Name).ToPagedList(pageIndex, pageSize);
                     break;
             }
             ViewBag.AlbumID = album.AlbumID;
-            ViewBag.UserName = album.User.UserName;
+            ViewBag.UserName = album.AspNetUser.UserName;
             ViewBag.AlbumName = album.Name;
             ViewBag.Description = album.Description;
             string directLink = string.Format("{0}://{1}{2}{3}{4}", Request.Url.Scheme,
@@ -153,51 +109,10 @@ namespace PhotoLibrary.Controllers
                 usrid = User.Identity.GetUserId();
             }
             ViewBag.UserID = usrid;
-            if (PhotoID == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Photo photo = await db.Photos.FindAsync(PhotoID);
-            if (photo == null)
-            {
-                return HttpNotFound();
-            }
-            if (AlbumID == null)
-            {
-                AlbumID = await (from p in db.Photos
-                                 join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID
-                                 select ap.AlbumID).FirstAsync();
-            }
-            int backToAlbum = AlbumID.GetValueOrDefault(0);
-            int liked = 0;
-            if (usrid != "Guest")
-            {
-                liked = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == photo.PhotoID).
-                    Select(x => x.Liked).FirstOrDefaultAsync();
-            }
-            int nLikes = await db.LikePhotos.Where(x => x.PhotoID == photo.PhotoID).Where(x => x.Liked == 1).CountAsync();
-            int nDislikes = await db.LikePhotos.Where(x => x.PhotoID == photo.PhotoID).Where(x => x.Liked == -1).CountAsync();
-            ViewPhotoViewModel vp = new ViewPhotoViewModel();
-            vp.PhotoID = photo.PhotoID;
-            vp.UserName = photo.User.UserName;
-            vp.Name = photo.Name;
-            vp.Image = photo.Image;
-            vp.TimeTaken = photo.TimeTaken;
-            vp.Location = photo.Location;
-            vp.Device = photo.Device.Name;
-            vp.Focus = photo.Focus;
-            vp.Aperture = photo.Aperture;
-            vp.Shutter = photo.Shutter;
-            vp.ISO = photo.ISO;
-            vp.Flash = photo.Flash;
-            vp.UserID = photo.UserID;
-            vp.BackToAlbumID = backToAlbum;
-            vp.NLikes = nLikes;
-            vp.NDislikes = nDislikes;
-            vp.CanLike = ((usrid != photo.UserID) && (usrid != "Guest"));
-            vp.ModelLiked = liked == 1;
-            vp.ModelDisliked = liked == -1;
-            return View(vp);
+            int photoID = (PhotoID.HasValue) ? PhotoID.Value : 0;
+            int albumID = (AlbumID.HasValue) ? AlbumID.Value : 0;
+            PhotoViewBs photo =await objBs.GetPhoto(photoID, albumID, usrid);
+            return View(photo);
         }
         public async Task<ActionResult> SlugAction(string slug)
         {
@@ -205,7 +120,7 @@ namespace PhotoLibrary.Controllers
             {
                 return RedirectToAction("Index");
             }
-            Album album = await db.Albums.Where(a => a.AlbumSlug == slug).FirstOrDefaultAsync();
+            BOL.Album album = await objBs.albumBs.GetBySlug(slug);
             if (album == null)
             {
                 return RedirectToAction("Index");
@@ -215,15 +130,11 @@ namespace PhotoLibrary.Controllers
             int pageIndex = 1;
             pageIndex = 1;
             ViewBag.CurrentSort = "Name";
-            var PhotoList = await (from p in db.Photos
-                                   join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID
-                                   where (ap.AlbumID == album.AlbumID)
-                                   select p).Distinct().ToListAsync();
-            List<Photo> lp = new List<Photo>(PhotoList);
-            IPagedList<Photo> pg_photo = null;
-            pg_photo = lp.OrderBy(p => p.Name).ToPagedList(pageIndex, pageSize);
+            IEnumerable<BOL.Photo> Photos = await objBs.photoBs.GetByAlbumID(album.AlbumID);
+            IPagedList<BOL.Photo> pg_photo = null;
+            pg_photo = Photos.OrderBy(p => p.Name).ToPagedList(pageIndex, pageSize);
             ViewBag.AlbumID = album.AlbumID;
-            ViewBag.UserName = album.User.UserName;
+            ViewBag.UserName = album.AspNetUser.UserName;
             ViewBag.AlbumName = album.Name;
             ViewBag.Description = album.Description;
             string directLink = string.Format("{0}://{1}{2}{3}{4}", Request.Url.Scheme,
@@ -233,7 +144,57 @@ namespace PhotoLibrary.Controllers
         }
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ManageLike(ViewPhotoViewModel m, string button_like, string button_dislike, string button_delete)
+        //public async Task<ActionResult> ManageLike(ViewPhotoViewModel m, string button_like, string button_dislike, string button_delete)
+        //{
+        //    if (User.Identity.IsAuthenticated && m.CanLike)
+        //    {
+        //        string usrid = User.Identity.GetUserId();
+        //        if (m.UserID != usrid)
+        //        {
+        //            if (!String.IsNullOrEmpty(button_like))
+        //            {
+        //                var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
+        //                db.LikePhotos.RemoveRange(llp);
+        //                LikePhoto lp = new LikePhoto();
+        //                lp.PhotoID = m.PhotoID;
+        //                lp.UserID = usrid;
+        //                lp.Liked = 1;
+        //                db.LikePhotos.Add(lp);
+        //                await db.SaveChangesAsync();
+        //                m.ModelLiked = true;
+        //                m.ModelDisliked = false;
+        //            }
+        //            if (!String.IsNullOrEmpty(button_dislike))
+        //            {
+        //                var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
+        //                db.LikePhotos.RemoveRange(llp);
+        //                LikePhoto lp = new LikePhoto();
+        //                lp.PhotoID = m.PhotoID;
+        //                lp.UserID = usrid;
+        //                lp.Liked = -1;
+        //                db.LikePhotos.Add(lp);
+        //                await db.SaveChangesAsync();
+        //                m.ModelLiked = false;
+        //                m.ModelDisliked = true;
+        //            }
+        //            if (!String.IsNullOrEmpty(button_delete))
+        //            {
+        //                var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
+        //                db.LikePhotos.RemoveRange(llp);
+        //                await db.SaveChangesAsync();
+        //                m.ModelLiked = false;
+        //                m.ModelDisliked = false;
+        //            }
+        //            int nLikes = await db.LikePhotos.Where(x => x.PhotoID == m.PhotoID).Where(x => x.Liked == 1).CountAsync();
+        //            int nDislikes = await db.LikePhotos.Where(x => x.PhotoID == m.PhotoID).Where(x => x.Liked == -1).CountAsync();
+        //            m.NLikes = nLikes;
+        //            m.NDislikes = nDislikes;
+        //            return PartialView("ManageLike", m);
+        //        }
+        //    }
+        //    return HttpNotFound();
+        //}
+        public async Task<ActionResult> ManageLike(PhotoViewBs m, string button_like, string button_dislike, string button_delete)
         {
             if (User.Identity.IsAuthenticated && m.CanLike)
             {

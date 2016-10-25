@@ -4,12 +4,17 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PhotoLibrary.Models;
+using BOL;
 
 namespace PhotoLibrary.Helpers
 {
     public static class ImageHelper
     {
-        public static MvcHtmlString Image(this HtmlHelper html, Photo p, int size)
+        public static MvcHtmlString Image(this HtmlHelper html, BOL.Photo p, int size)
+        {
+            return Image(html, p.Name, p.Image, size);
+        }
+        public static MvcHtmlString Image(this HtmlHelper html, PhotoLibrary.Models.Photo p, int size)
         {
             return Image(html, p.Name, p.Image, size);
         }

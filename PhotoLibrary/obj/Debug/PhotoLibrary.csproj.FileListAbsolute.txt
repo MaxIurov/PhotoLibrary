@@ -578,15 +578,9 @@ C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\zh-CN\FluentValidation.resources.dl
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.pdb
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BLL.dll
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\DAL.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BLL.pdb
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL.pdb
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\DAL.pdb
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.csprojResolveAssemblyReference.cache
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL2.dll
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL2.pdb
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\PhotoLibrary.mdf
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\PhotoLibrary_log.ldf
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL3.dll
-C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL3.pdb
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL.dll
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL.pdb

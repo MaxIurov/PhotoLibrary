@@ -1,5 +1,3 @@
-C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\PhotoLibrary.mdf
-C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\PhotoLibrary_log.ldf
 C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.dll
 C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.SqlServer.dll
 C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\EntityFramework.xml

@@ -1,4 +1,4 @@
-﻿using BOL3;
+﻿using BOL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +48,10 @@ namespace DAL
             return await (from a in db.Albums
                           join ap in db.AlbumToPhotoes on a.AlbumID equals ap.AlbumID
                           select a).Distinct().ToListAsync();
-            //return await db.Albums.ToListAsync();
+        }
+        public async Task<Album> GetBySlug(string slug)
+        {
+            return await db.Albums.Where(a => a.AlbumSlug == slug).FirstOrDefaultAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace BOL3
+namespace BOL
 {
     using System;
     using System.Data.Entity;
@@ -33,7 +33,7 @@ namespace BOL3
 
             modelBuilder.Entity<AspNetUser>()
                 .HasMany(e => e.Albums)
-                .WithOptional(e => e.AspNetUser)
+                .WithRequired(e => e.AspNetUser)
                 .HasForeignKey(e => e.UserID);
 
             modelBuilder.Entity<AspNetUser>()
@@ -48,12 +48,12 @@ namespace BOL3
 
             modelBuilder.Entity<AspNetUser>()
                 .HasMany(e => e.LikePhotoes)
-                .WithOptional(e => e.AspNetUser)
+                .WithRequired(e => e.AspNetUser)
                 .HasForeignKey(e => e.UserID);
 
             modelBuilder.Entity<AspNetUser>()
                 .HasMany(e => e.Photos)
-                .WithOptional(e => e.AspNetUser)
+                .WithRequired(e => e.AspNetUser)
                 .HasForeignKey(e => e.UserID);
         }
     }

@@ -1,4 +1,4 @@
-namespace BOL3
+namespace BOL
 {
     using System;
     using System.Collections.Generic;
