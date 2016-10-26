@@ -584,3 +584,9 @@ C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\DAL.pdb
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\obj\Debug\PhotoLibrary.csprojResolveAssemblyReference.cache
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL.dll
 C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\BOL.pdb
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\System.Net.Http.Formatting.dll
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\System.Web.Http.dll
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\System.Web.Http.WebHost.dll
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\System.Net.Http.Formatting.xml
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\System.Web.Http.xml
+C:\_MyProjects\PhotoLibrary\PhotoLibrary\bin\System.Web.Http.WebHost.xml

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using BLL;
 
 namespace PhotoLibrary.Common
 {
     public class LogToDataBase : ActionFilterAttribute, IExceptionFilter
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        //private ApplicationDbContext db = new ApplicationDbContext();
+        private BaseBs objBs = new BaseBs();
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             string myMessage = "";
@@ -25,7 +27,7 @@ namespace PhotoLibrary.Common
                     myMessage = myMessage + ", value: " + parameter.Value.ToString();
                 }
             }
-            LogMessage m = new LogMessage
+            BOL.LogMessage m = new BOL.LogMessage
             {
                 Controller = filterContext.RouteData.Values["controller"].ToString(),
                 Action = filterContext.RouteData.Values["action"].ToString(),
@@ -37,11 +39,11 @@ namespace PhotoLibrary.Common
         }
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            LogMessage m = new LogMessage
+            BOL.LogMessage m = new BOL.LogMessage
             {
                 Controller = filterContext.RouteData.Values["controller"].ToString(),
                 Action = filterContext.RouteData.Values["action"].ToString(),
-                Message = "OnResultExecuted",
+                Message = "OnResultExecuted.",
                 Time = DateTime.Now
             };
             LogMessageToDB(m);
@@ -49,19 +51,21 @@ namespace PhotoLibrary.Common
         }
         public void OnException(ExceptionContext context)
         {
-            LogMessage m = new LogMessage
+            BOL.LogMessage m = new BOL.LogMessage
             {
                 Controller = context.RouteData.Values["controller"].ToString(),
                 Action = context.RouteData.Values["action"].ToString(),
-                Message = context.Exception.Message,
+                Message = "Exception: " + context.Exception.Message,
                 Time = DateTime.Now
             };
             LogMessageToDB(m);
         }
-        private void LogMessageToDB(LogMessage mes)
+        private void LogMessageToDB(BOL.LogMessage mes)
         {
-            db.LogMessages.Add(mes);
-            db.SaveChanges();
+            var task = Task.Run(async () => { await objBs.logMessageBs.Log(mes); });
+            task.Wait();
+            //db.LogMessages.Add(mes);
+            //db.SaveChanges();
         }
     }
 }

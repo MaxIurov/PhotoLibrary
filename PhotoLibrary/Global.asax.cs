@@ -8,6 +8,7 @@ using System.Web.Routing;
 using System.Data.Entity;
 using PhotoLibrary.Models;
 using FluentValidation.Mvc;
+using System.Web.Http;
 
 namespace PhotoLibrary
 {
@@ -15,6 +16,7 @@ namespace PhotoLibrary
     {
         protected void Application_Start()
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             Database.SetInitializer<ApplicationDbContext>(new AppDbInitializer());
 
             AreaRegistration.RegisterAllAreas();

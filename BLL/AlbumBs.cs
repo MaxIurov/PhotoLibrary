@@ -23,17 +23,17 @@ namespace BLL
         {
             return await objDb.GetByID(id);
         }
-        public void Insert(Album a)
+        public async Task Insert(Album a)
         {
-            objDb.Insert(a);
+            await objDb.Insert(a);
         }
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            objDb.Delete(id);
+            await objDb.Delete(id);
         }
-        public void Update(Album a)
+        public async Task Update(Album a)
         {
-            objDb.Update(a);
+            await objDb.Update(a);
         }
         public async Task<IEnumerable<Album>> GetNotEmpty()
         {

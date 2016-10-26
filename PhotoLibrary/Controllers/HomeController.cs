@@ -19,8 +19,13 @@ namespace PhotoLibrary.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        //private ApplicationDbContext db = new ApplicationDbContext();
         private HomeBs objBs = new HomeBs();
+        public ActionResult PhotoList()
+        {
+            ViewBag.Message = "Web Api Photo List";
+            return View();
+        }
         public async Task<ActionResult> Index()
         {
             ViewBag.Message = "Home page.";
@@ -57,7 +62,7 @@ namespace PhotoLibrary.Controllers
 
             ViewBag.CurrentSort = sortOrder;
             sortOrder = String.IsNullOrEmpty(sortOrder) ? "Name" : sortOrder;
-            IEnumerable<BOL.Photo> Photos= await objBs.photoBs.GetByAlbumID(AlbumID.Value);
+            IEnumerable<BOL.Photo> Photos = await objBs.photoBs.GetByAlbumID(AlbumID.Value);
             IPagedList<BOL.Photo> pg_photo = null;
             switch (sortOrder)
             {
@@ -111,7 +116,7 @@ namespace PhotoLibrary.Controllers
             ViewBag.UserID = usrid;
             int photoID = (PhotoID.HasValue) ? PhotoID.Value : 0;
             int albumID = (AlbumID.HasValue) ? AlbumID.Value : 0;
-            PhotoViewBs photo =await objBs.GetPhoto(photoID, albumID, usrid);
+            PhotoViewBs photo = await objBs.GetPhoto(photoID, albumID, usrid);
             return View(photo);
         }
         public async Task<ActionResult> SlugAction(string slug)
@@ -144,56 +149,6 @@ namespace PhotoLibrary.Controllers
         }
         [Authorize]
         [ValidateAntiForgeryToken]
-        //public async Task<ActionResult> ManageLike(ViewPhotoViewModel m, string button_like, string button_dislike, string button_delete)
-        //{
-        //    if (User.Identity.IsAuthenticated && m.CanLike)
-        //    {
-        //        string usrid = User.Identity.GetUserId();
-        //        if (m.UserID != usrid)
-        //        {
-        //            if (!String.IsNullOrEmpty(button_like))
-        //            {
-        //                var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
-        //                db.LikePhotos.RemoveRange(llp);
-        //                LikePhoto lp = new LikePhoto();
-        //                lp.PhotoID = m.PhotoID;
-        //                lp.UserID = usrid;
-        //                lp.Liked = 1;
-        //                db.LikePhotos.Add(lp);
-        //                await db.SaveChangesAsync();
-        //                m.ModelLiked = true;
-        //                m.ModelDisliked = false;
-        //            }
-        //            if (!String.IsNullOrEmpty(button_dislike))
-        //            {
-        //                var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
-        //                db.LikePhotos.RemoveRange(llp);
-        //                LikePhoto lp = new LikePhoto();
-        //                lp.PhotoID = m.PhotoID;
-        //                lp.UserID = usrid;
-        //                lp.Liked = -1;
-        //                db.LikePhotos.Add(lp);
-        //                await db.SaveChangesAsync();
-        //                m.ModelLiked = false;
-        //                m.ModelDisliked = true;
-        //            }
-        //            if (!String.IsNullOrEmpty(button_delete))
-        //            {
-        //                var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
-        //                db.LikePhotos.RemoveRange(llp);
-        //                await db.SaveChangesAsync();
-        //                m.ModelLiked = false;
-        //                m.ModelDisliked = false;
-        //            }
-        //            int nLikes = await db.LikePhotos.Where(x => x.PhotoID == m.PhotoID).Where(x => x.Liked == 1).CountAsync();
-        //            int nDislikes = await db.LikePhotos.Where(x => x.PhotoID == m.PhotoID).Where(x => x.Liked == -1).CountAsync();
-        //            m.NLikes = nLikes;
-        //            m.NDislikes = nDislikes;
-        //            return PartialView("ManageLike", m);
-        //        }
-        //    }
-        //    return HttpNotFound();
-        //}
         public async Task<ActionResult> ManageLike(PhotoViewBs m, string button_like, string button_dislike, string button_delete)
         {
             if (User.Identity.IsAuthenticated && m.CanLike)
@@ -203,54 +158,36 @@ namespace PhotoLibrary.Controllers
                 {
                     if (!String.IsNullOrEmpty(button_like))
                     {
-                        var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
-                        db.LikePhotos.RemoveRange(llp);
-                        LikePhoto lp = new LikePhoto();
-                        lp.PhotoID = m.PhotoID;
-                        lp.UserID = usrid;
-                        lp.Liked = 1;
-                        db.LikePhotos.Add(lp);
-                        await db.SaveChangesAsync();
+                        await objBs.likePhotoBs.Like(usrid, m.PhotoID);
                         m.ModelLiked = true;
                         m.ModelDisliked = false;
                     }
                     if (!String.IsNullOrEmpty(button_dislike))
                     {
-                        var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
-                        db.LikePhotos.RemoveRange(llp);
-                        LikePhoto lp = new LikePhoto();
-                        lp.PhotoID = m.PhotoID;
-                        lp.UserID = usrid;
-                        lp.Liked = -1;
-                        db.LikePhotos.Add(lp);
-                        await db.SaveChangesAsync();
+                        await objBs.likePhotoBs.Dislike(usrid, m.PhotoID);
                         m.ModelLiked = false;
                         m.ModelDisliked = true;
                     }
                     if (!String.IsNullOrEmpty(button_delete))
                     {
-                        var llp = await db.LikePhotos.Where(x => x.UserID == usrid).Where(x => x.PhotoID == m.PhotoID).ToListAsync();
-                        db.LikePhotos.RemoveRange(llp);
-                        await db.SaveChangesAsync();
+                        await objBs.likePhotoBs.Delete(usrid, m.PhotoID);
                         m.ModelLiked = false;
                         m.ModelDisliked = false;
                     }
-                    int nLikes = await db.LikePhotos.Where(x => x.PhotoID == m.PhotoID).Where(x => x.Liked == 1).CountAsync();
-                    int nDislikes = await db.LikePhotos.Where(x => x.PhotoID == m.PhotoID).Where(x => x.Liked == -1).CountAsync();
-                    m.NLikes = nLikes;
-                    m.NDislikes = nDislikes;
+                    m.NLikes = await objBs.likePhotoBs.LikeNumber(m.PhotoID);
+                    m.NDislikes = await objBs.likePhotoBs.DislikeNumber(m.PhotoID);
                     return PartialView("ManageLike", m);
                 }
             }
             return HttpNotFound();
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
     }
 }

@@ -15,7 +15,7 @@ namespace DAL
         {
             db = new PhotoLibraryModel();
         }
-        public async void Like(string userID,int photoID)
+        public async Task Like(string userID,int photoID)
         {
             var currentLike = await db.LikePhotoes.Where(x => x.UserID == userID).Where(x => x.PhotoID == photoID).ToListAsync();
             db.LikePhotoes.RemoveRange(currentLike);
@@ -26,7 +26,7 @@ namespace DAL
             db.LikePhotoes.Add(newLike);
             await db.SaveChangesAsync();
         }
-        public async void Dislike(string userID, int photoID)
+        public async Task Dislike(string userID, int photoID)
         {
             var currentLike = await db.LikePhotoes.Where(x => x.UserID == userID).Where(x => x.PhotoID == photoID).ToListAsync();
             db.LikePhotoes.RemoveRange(currentLike);
@@ -37,11 +37,19 @@ namespace DAL
             db.LikePhotoes.Add(newLike);
             await db.SaveChangesAsync();
         }
-        public async void Delete(string userID, int photoID)
+        public async Task Delete(string userID, int photoID)
         {
             var currentLike = await db.LikePhotoes.Where(x => x.UserID == userID).Where(x => x.PhotoID == photoID).ToListAsync();
             db.LikePhotoes.RemoveRange(currentLike);
             await db.SaveChangesAsync();
+        }
+        public async Task<int> LikeNumber(int photoID)
+        {
+            return await db.LikePhotoes.Where(x => x.PhotoID == photoID).Where(x => x.Liked == 1).CountAsync();
+        }
+        public async Task<int> DislikeNumber(int photoID)
+        {
+            return await db.LikePhotoes.Where(x => x.PhotoID == photoID).Where(x => x.Liked == -1).CountAsync();
         }
     }
 }

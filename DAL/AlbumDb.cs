@@ -23,23 +23,23 @@ namespace DAL
         {
             return await db.Albums.FindAsync(id);
         }
-        public void Insert(Album a)
+        public async Task Insert(Album album)
         {
-            db.Albums.Add(a);
-            Save();
+            db.Albums.Add(album);
+            await Save();
         }
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
-            Album a = await db.Albums.FindAsync(id);
-            db.Albums.Remove(a);
-            Save();
+            Album album = await db.Albums.FindAsync(id);
+            db.Albums.Remove(album);
+            await Save();
         }
-        public void Update(Album a)
+        public async Task Update(Album album)
         {
-            db.Entry(a).State = EntityState.Modified;
-            Save();
+            db.Entry(album).State = EntityState.Modified;
+            await Save();
         }
-        public async void Save()
+        public async Task Save()
         {
             await db.SaveChangesAsync();
         }

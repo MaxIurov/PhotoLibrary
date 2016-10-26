@@ -215,12 +215,12 @@ namespace PhotoLibrary.Controllers
             {
                 var user = new ApplicationUser
                 { UserName = model.UserName, Email = model.Email, CanAddAlbum = true, CanAddPhoto = true };
-
                 var result = await UserManager.CreateAsync(user, model.Password);
-                //Add Role
-                await UserManager.AddToRoleAsync(user.Id, model.UserRoles);
                 if (result.Succeeded)
                 {
+                    //Add Role
+                    await UserManager.AddToRoleAsync(user.Id, model.UserRoles);
+
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     return RedirectToAction("Index", "Home");
                 }

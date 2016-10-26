@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AlbumDb.cs" />
     <Compile Include="LikePhotoDb.cs" />
+    <Compile Include="LogMessageDb.cs" />
     <Compile Include="PhotoDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserDb.cs" />

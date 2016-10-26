@@ -23,17 +23,17 @@ namespace BLL
         {
             return await objDb.GetByID(id);
         }
-        public void Insert(Photo p)
+        public async Task Insert(Photo photo)
         {
-            objDb.Insert(p);
+            await objDb.Insert(photo);
         }
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            objDb.Delete(id);
+            await objDb.Delete(id);
         }
-        public void Update(Photo p)
+        public async Task Update(Photo photo)
         {
-            objDb.Update(p);
+            await objDb.Update(photo);
         }
         public async Task<IEnumerable<Photo>> GetByAlbumID(int id)
         {

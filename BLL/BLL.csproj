@@ -54,7 +54,10 @@
     <Compile Include="BaseBs.cs" />
     <Compile Include="Home\HomeBs.cs" />
     <Compile Include="Home\PhotoViewBs.cs" />
+    <Compile Include="LikePhotoBs.cs" />
+    <Compile Include="LogMessageBs.cs" />
     <Compile Include="PhotoBs.cs" />
+    <Compile Include="PhotoIndexBs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserBs.cs" />
   </ItemGroup>

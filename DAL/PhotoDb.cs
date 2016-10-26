@@ -23,23 +23,23 @@ namespace DAL
         {
             return await db.Photos.FindAsync(id);
         }
-        public void Insert(Photo p)
+        public async Task Insert(Photo photo)
         {
-            db.Photos.Add(p);
-            Save();
+            db.Photos.Add(photo);
+            await Save();
         }
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
             Photo p = await db.Photos.FindAsync(id);
             db.Photos.Remove(p);
-            Save();
+            await Save();
         }
-        public void Update(Photo p)
+        public async Task Update(Photo photo)
         {
-            db.Entry(p).State = EntityState.Modified;
-            Save();
+            db.Entry(photo).State = EntityState.Modified;
+            await Save();
         }
-        public async void Save()
+        public async Task Save()
         {
             await db.SaveChangesAsync();
         }

@@ -68,5 +68,31 @@ namespace BLL
             }
             return photoView;
         }
+        public async Task<List<PhotoIndexBs>> GetAllPhotos()
+        {
+            IEnumerable<Photo> Photos = await photoBs.GetAll();
+            List<PhotoIndexBs> AllPhotos = new List<PhotoIndexBs>();
+            foreach (var i in Photos)
+            {
+                PhotoIndexBs Photo = new PhotoIndexBs();
+                Photo.PhotoID = i.PhotoID;
+                Photo.UserName = i.AspNetUser.UserName;
+                Photo.Name = i.Name;
+                Photo.Image = i.Image;
+                Photo.TimeTaken = i.TimeTaken;
+                Photo.Location = i.Location;
+                Photo.Device = i.Device.Name;
+                Photo.Focus = i.Focus;
+                Photo.Aperture = i.Aperture;
+                Photo.Shutter = i.Shutter;
+                Photo.ISO = i.ISO;
+                Photo.Flash = i.Flash;
+                Photo.UserID = i.UserID;
+                Photo.NLikes = i.LikePhotoes.Where(x => x.Liked == 1).Count();
+                Photo.NDislikes = i.LikePhotoes.Where(x => x.Liked == -1).Count();
+                AllPhotos.Add(Photo);
+            }
+            return AllPhotos;
+        }
     }
 }

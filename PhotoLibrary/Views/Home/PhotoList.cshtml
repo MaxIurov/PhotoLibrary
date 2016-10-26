@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "PhotoList";
+}
+<h2>PhotoList</h2>
+<div id="body">
+    <section class="content-wrapper main-content">
+        <table id="photos" class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayName("Name")</th>
+                    <th>@Html.DisplayName("User")</th>
+                    <th>@Html.DisplayName("Likes")</th>
+                    <th>@Html.DisplayName("Dislikes")</th>
+                </tr>
+            </thead>
+        </table>
+    </section>
+</div>
+<script type="text/javascript">
+    var uri = window.location.protocol + '//' + window.location.host + '/api/webapi';
+    $(document).ready(function () {
+        $.getJSON(uri)
+            .done(function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("<tr><td>" + data[i].Name + "</td><td>" + data[i].UserName + "</td><td>" + data[i].NLikes + "</td><td>" + data[i].NDislikes + "</td></tr>").appendTo($("#photos"));
+                }
+            });
+    });
+</script> 
