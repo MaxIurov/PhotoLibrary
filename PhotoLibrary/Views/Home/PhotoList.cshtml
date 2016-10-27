@@ -9,6 +9,15 @@
                 <tr>
                     <th>@Html.DisplayName("Name")</th>
                     <th>@Html.DisplayName("User")</th>
+                    <th>@Html.DisplayName("Photo")</th>
+                    <th>@Html.DisplayName("Time Taken")</th>
+                    <th>@Html.DisplayName("Location")</th>
+                    <th>@Html.DisplayName("Device")</th>
+                    <th>@Html.DisplayName("Focus")</th>
+                    <th>@Html.DisplayName("Aperture")</th>
+                    <th>@Html.DisplayName("Shutter")</th>
+                    <th>@Html.DisplayName("ISO")</th>
+                    <th>@Html.DisplayName("Flash")</th>
                     <th>@Html.DisplayName("Likes")</th>
                     <th>@Html.DisplayName("Dislikes")</th>
                 </tr>
@@ -17,12 +26,23 @@
     </section>
 </div>
 <script type="text/javascript">
+    //function myconvert(date) {
+    //    var mm = date.getMonth() + 1; // getMonth() is zero-based
+    //    var dd = date.getDate();
+    //    return [date.getFullYear(), !mm[1] && '0', mm, !dd[1] && '0', dd].join(''); // padding
+    //};
     var uri = window.location.protocol + '//' + window.location.host + '/api/webapi';
     $(document).ready(function () {
         $.getJSON(uri)
             .done(function (data) {
                 for (var i = 0; i < data.length; i++) {
-                    $("<tr><td>" + data[i].Name + "</td><td>" + data[i].UserName + "</td><td>" + data[i].NLikes + "</td><td>" + data[i].NDislikes + "</td></tr>").appendTo($("#photos"));
+                    $("<tr><td>" +
+                        data[i].Name + "</td><td>" + data[i].UserName + "</td><td>" +
+                        "<img alt='" + data[i].Name + "' src='data:image/jpg;base64," + data[i].Image + "' style='max-width:50px;max-height:50px'/></td><td>" +
+                        data[i].TimeTaken + "</td><td>" + data[i].Location + "</td><td>" + data[i].Device + "</td><td>" +
+                        data[i].Focus + "</td><td>" + data[i].Aperture + "</td><td>" + data[i].Shutter + "</td><td>" +
+                        data[i].ISO + "</td><td>" + data[i].Flash + "</td><td>" + data[i].NLikes + "</td><td>" + data[i].NDislikes +
+                        "</td></tr>").appendTo($("#photos"));
                 }
             });
     });

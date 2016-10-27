@@ -30,14 +30,11 @@
         </td>
     </tr>
 </table>
-<h3>Link to this album: @ViewBag.DirectLink</h3>
-<button id="getLink" onclick="copyToClipboard('@ViewBag.DirectLink')">Get Link</button>
-<script>
-  function copyToClipboard(text) {
-    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
-  }
-</script>
-
+<div class="col-md-12">
+    Link to this Album: <input type="text" id="getLink" value="@ViewBag.DirectLink" />
+    <button id="getLinkBtn" data-copytarget="#getLink">Get Link</button>
+</div>
+<hr />
 @using (Html.BeginForm())
 {
     <table>
@@ -93,3 +90,66 @@
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
+<style type="text/css">
+#getLinkBtn {
+  position: relative;
+}
+#getLink {
+    display:inline-block;
+    width: 100%;
+}
+.copied::after {
+  position: absolute;
+  top: 12%;
+  right: 110%;
+  display: block;
+  content: "copied";
+  font-size: 1em;
+  padding: 2px 3px;
+  color: #fff;
+  background-color: #22a;
+  border-radius: 3px;
+  opacity: 0;
+  will-change: opacity, transform;
+  animation: showcopied 1.5s ease;
+}
+@@keyframes showcopied {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>
+<script>
+    (function ()
+    {
+        document.body.addEventListener('click', copy, true);
+        function copy(e)
+        {
+            var
+                t = e.target,
+                c = t.dataset.copytarget,
+                inp = (c ? document.querySelector(c) : null);
+            if (inp && inp.select)
+            {
+                inp.select();
+                try {
+                    document.execCommand('copy');
+                    inp.blur();
+                    t.classList.add('copied');
+                    setTimeout(function () { t.classList.remove('copied'); }, 1500);
+                }
+                catch (err) {
+                    alert('please press Ctrl+C to copy');
+                }
+            }
+        }
+    })();
+</script>

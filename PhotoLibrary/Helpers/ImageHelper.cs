@@ -46,7 +46,6 @@ namespace PhotoLibrary.Helpers
             img.MergeAttribute("src", imgsrc);
             img.MergeAttribute("alt", name);
             img.MergeAttribute("style", mystyle);
-
             return MvcHtmlString.Create(img.ToString(TagRenderMode.SelfClosing));
         }
     }

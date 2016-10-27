@@ -152,11 +152,18 @@ namespace PhotoLibrary.Controllers
             {
                 lAlbums.Add(new CheckBoxViewModel { Id = item.AlbumID, Name = item.Name, Checked = item.Checked });
             }
+            string timeTaken = "";
+            if (photo.TimeTaken.HasValue)
+            {
+                DateTime time = photo.TimeTaken.Value;
+                timeTaken = time.ToString("dd.MM.yyyy HH:mm");
+            }
             PhotoViewModel pvm = new PhotoViewModel();
             pvm.PhotoID = photo.PhotoID;
             pvm.Name = photo.Name;
             pvm.Image = photo.Image;
             pvm.TimeTaken = photo.TimeTaken;
+            pvm.TimeTakenStr = timeTaken;
             pvm.Location = photo.Location;
             pvm.DeviceID = photo.DeviceID;
             pvm.DeviceList = sl;
@@ -173,11 +180,24 @@ namespace PhotoLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(PhotoViewModel photovm)
         {
+            DateTime? modelTimeTaken = null;
+            if (photovm.TimeTakenStr != "")
+            {
+                DateTime timeTaken;
+                if (DateTime.TryParseExact(photovm.TimeTakenStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeTaken))
+                {
+                    modelTimeTaken = timeTaken;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Wrong Time Taken.");
+                }
+            }
             Photo photo = new Photo();
             photo.PhotoID = photovm.PhotoID;
             photo.Name = photovm.Name;
             photo.Image = photovm.Image;
-            photo.TimeTaken = photovm.TimeTaken;
+            photo.TimeTaken = modelTimeTaken;
             photo.Location = photovm.Location;
             photo.DeviceID = photovm.DeviceID;
             photo.Focus = photovm.Focus;
@@ -272,8 +292,6 @@ namespace PhotoLibrary.Controllers
             PhotoSearchModel model = new PhotoSearchModel();
             model.DeviceList = sl;
             model.DeviceID = devID;
-            //model.TimeFrom = null;
-            //model.TimeTo = null;
             return View(model);
         }
         [AllowAnonymous]
@@ -298,6 +316,32 @@ namespace PhotoLibrary.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> AllSearch(PhotoSearchModel m)
         {
+            DateTime? modelTimeFrom = null;
+            if (m.TimeFrom != "")
+            {
+                DateTime timeFrom;
+                if (DateTime.TryParseExact(m.TimeFrom, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeFrom))
+                {
+                    modelTimeFrom = timeFrom;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Wrong TimeFrom.");
+                }
+            }
+            DateTime? modelTimeTo = null;
+            if (m.TimeTo != "")
+            {
+                DateTime timeTo;
+                if (DateTime.TryParseExact(m.TimeTo, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeTo))
+                {
+                    modelTimeTo = timeTo;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Wrong TimeTo.");
+                }
+            }
             string usrid = "Guest";
             if (User.Identity.IsAuthenticated)
             {
@@ -313,7 +357,7 @@ namespace PhotoLibrary.Controllers
                                          from p_ap in pGroup.DefaultIfEmpty()
                                          where ((p.UserID == usrid) | (p_ap != null)) &
                                          (p.Name.Contains(searchName)) &
-                                         ((p.TimeTaken >= m.TimeFrom) | (m.TimeFrom == null)) & ((p.TimeTaken <= m.TimeTo) | (m.TimeTo == null)) &
+                                         ((p.TimeTaken >= modelTimeFrom) | (modelTimeFrom == null)) & ((p.TimeTaken <= modelTimeTo) | (modelTimeTo == null)) &
                                          ((p.Location.Contains(m.Location)) | (m.Location == null) | (m.Location == "")) &
                                          ((p.DeviceID == m.DeviceID) | (m.DeviceID == 1)) &
                                          ((p.Focus == m.Focus) | (m.Focus == null)) &

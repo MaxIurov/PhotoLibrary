@@ -1,4 +1,0 @@
-https://www.sitepoint.com/javascript-copy-to-clipboard/
-http://deviq.com/repository-pattern/
-http://stackoverflow.com/questions/343899/how-to-cache-data-in-a-mvc-application
-https://www.asp.net/web-api/overview/data/using-web-api-with-entity-framework/part-1
