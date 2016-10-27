@@ -132,8 +132,11 @@
         $(function () {
             $('#datepickertimetaken').datetimepicker({
                 viewMode: 'years',
-                format: 'DD.MM.YYYY HH:mm'
+                format: 'DD.MM.YYYY HH:mm',
+                showClear: true,
+                showClose: true
             });
+            $('#datepickertimetaken').data("DateTimePicker").defaultDate(@Html.Raw(Json.Encode(Model.TimeTakenStr)));
         });
 </script>
 

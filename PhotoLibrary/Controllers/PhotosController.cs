@@ -25,24 +25,30 @@ namespace PhotoLibrary.Controllers
         {
             string usrid = User.Identity.GetUserId();
             ViewBag.UserID = usrid;
-            List<Photo> lp = await db.Photos.Where(u => u.User.Id == usrid).ToListAsync();
-            PhotoIndexViewModel pivm = new PhotoIndexViewModel();
-            pivm.UserID = usrid;
+            List<Photo> photos = await db.Photos.Where(u => u.User.Id == usrid).ToListAsync();
+            PhotoIndexViewModel photoIndex = new PhotoIndexViewModel();
+            photoIndex.UserID = usrid;
             var thisUser = await db.Users.Where(u => u.Id == usrid).SingleOrDefaultAsync();
-            pivm.CanAddAlbum = thisUser.CanAddAlbum.GetValueOrDefault(false);
-            pivm.CanAddPhoto = thisUser.CanAddPhoto.GetValueOrDefault(false);
-            List<PhotoSmallViewModel> lpsvm = new List<PhotoSmallViewModel>();
-            foreach (var item in lp)
+            photoIndex.CanAddAlbum = thisUser.CanAddAlbum.GetValueOrDefault(false);
+            photoIndex.CanAddPhoto = thisUser.CanAddPhoto.GetValueOrDefault(false);
+            List<PhotoSmallViewModel> photoListItem = new List<PhotoSmallViewModel>();
+            foreach (var item in photos)
             {
                 int nLikes = await db.LikePhotos.Where(x => x.PhotoID == item.PhotoID).Where(x => x.Liked == 1).CountAsync();
                 int nDislikes = await db.LikePhotos.Where(x => x.PhotoID == item.PhotoID).Where(x => x.Liked == -1).CountAsync();
                 string l_d = nLikes.ToString() + "/" + nDislikes.ToString();
-                PhotoSmallViewModel psvm = new PhotoSmallViewModel
-                { PhotoID = item.PhotoID, Name = item.Name, Image = item.Image, Likes_Dislikes = l_d };
-                lpsvm.Add(psvm);
+                photoListItem.Add(
+                    new PhotoSmallViewModel
+                    {
+                        PhotoID = item.PhotoID,
+                        Name = item.Name,
+                        Image = item.Image,
+                        Likes_Dislikes = l_d
+                    }
+                );
             }
-            pivm.Photos = lpsvm;
-            return View(pivm);
+            photoIndex.Photos = photoListItem;
+            return View(photoIndex);
         }
         public async Task<ActionResult> Details(int? id)
         {
@@ -61,8 +67,8 @@ namespace PhotoLibrary.Controllers
         {
             string usrid = User.Identity.GetUserId();
             ViewBag.UserID = usrid;
-            Photo m = new Photo() { UserID = usrid };
-            return View(m);
+            Photo photo = new Photo() { UserID = usrid };
+            return View(photo);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -158,33 +164,33 @@ namespace PhotoLibrary.Controllers
                 DateTime time = photo.TimeTaken.Value;
                 timeTaken = time.ToString("dd.MM.yyyy HH:mm");
             }
-            PhotoViewModel pvm = new PhotoViewModel();
-            pvm.PhotoID = photo.PhotoID;
-            pvm.Name = photo.Name;
-            pvm.Image = photo.Image;
-            pvm.TimeTaken = photo.TimeTaken;
-            pvm.TimeTakenStr = timeTaken;
-            pvm.Location = photo.Location;
-            pvm.DeviceID = photo.DeviceID;
-            pvm.DeviceList = sl;
-            pvm.Focus = photo.Focus;
-            pvm.Aperture = photo.Aperture;
-            pvm.Shutter = photo.Shutter;
-            pvm.ISO = photo.ISO;
-            pvm.Flash = photo.Flash;
-            pvm.Albums = lAlbums;
-            pvm.UserID = usrid;
-            return View(pvm);
+            PhotoViewModel editPhoto = new PhotoViewModel();
+            editPhoto.PhotoID = photo.PhotoID;
+            editPhoto.Name = photo.Name;
+            editPhoto.Image = photo.Image;
+            editPhoto.TimeTaken = photo.TimeTaken;
+            editPhoto.TimeTakenStr = timeTaken;
+            editPhoto.Location = photo.Location;
+            editPhoto.DeviceID = photo.DeviceID;
+            editPhoto.DeviceList = sl;
+            editPhoto.Focus = photo.Focus;
+            editPhoto.Aperture = photo.Aperture;
+            editPhoto.Shutter = photo.Shutter;
+            editPhoto.ISO = photo.ISO;
+            editPhoto.Flash = photo.Flash;
+            editPhoto.Albums = lAlbums;
+            editPhoto.UserID = usrid;
+            return View(editPhoto);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(PhotoViewModel photovm)
+        public async Task<ActionResult> Edit(PhotoViewModel editPhoto)
         {
             DateTime? modelTimeTaken = null;
-            if (photovm.TimeTakenStr != "")
+            if (!string.IsNullOrWhiteSpace(editPhoto.TimeTakenStr))
             {
                 DateTime timeTaken;
-                if (DateTime.TryParseExact(photovm.TimeTakenStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeTaken))
+                if (DateTime.TryParseExact(editPhoto.TimeTakenStr, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeTaken))
                 {
                     modelTimeTaken = timeTaken;
                 }
@@ -194,18 +200,18 @@ namespace PhotoLibrary.Controllers
                 }
             }
             Photo photo = new Photo();
-            photo.PhotoID = photovm.PhotoID;
-            photo.Name = photovm.Name;
-            photo.Image = photovm.Image;
+            photo.PhotoID = editPhoto.PhotoID;
+            photo.Name = editPhoto.Name;
+            photo.Image = editPhoto.Image;
             photo.TimeTaken = modelTimeTaken;
-            photo.Location = photovm.Location;
-            photo.DeviceID = photovm.DeviceID;
-            photo.Focus = photovm.Focus;
-            photo.Aperture = photovm.Aperture;
-            photo.Shutter = photovm.Shutter;
-            photo.ISO = photovm.ISO;
-            photo.Flash = photovm.Flash;
-            photo.UserID = photovm.UserID;
+            photo.Location = editPhoto.Location;
+            photo.DeviceID = editPhoto.DeviceID;
+            photo.Focus = editPhoto.Focus;
+            photo.Aperture = editPhoto.Aperture;
+            photo.Shutter = editPhoto.Shutter;
+            photo.ISO = editPhoto.ISO;
+            photo.Flash = editPhoto.Flash;
+            photo.UserID = editPhoto.UserID;
             if (ModelState.IsValid)
             {
                 db.Entry(photo).State = EntityState.Modified;
@@ -216,7 +222,7 @@ namespace PhotoLibrary.Controllers
                         db.Entry(item).State = EntityState.Deleted;
                     }
                 }
-                foreach (var item in photovm.Albums)
+                foreach (var item in editPhoto.Albums)
                 {
                     if (item.Checked)
                     {
@@ -227,8 +233,8 @@ namespace PhotoLibrary.Controllers
                 return RedirectToAction("Index");
             }
             List<Device> devices = await db.Devices.ToListAsync();
-            photovm.DeviceList = new SelectList(devices, "DeviceID", "Name", "Empty");
-            return View(photovm);
+            editPhoto.DeviceList = new SelectList(devices, "DeviceID", "Name", "Empty");
+            return View(editPhoto);
         }
         public async Task<ActionResult> Delete(int? id)
         {
@@ -295,7 +301,7 @@ namespace PhotoLibrary.Controllers
             return View(model);
         }
         [AllowAnonymous]
-        public async Task<ActionResult> NameSearch(PhotoSearchModel m)
+        public async Task<ActionResult> NameSearch(PhotoSearchModel model)
         {
             string usrid = "Guest";
             if (User.Identity.IsAuthenticated)
@@ -304,23 +310,23 @@ namespace PhotoLibrary.Controllers
             }
             List<Device> devices = await db.Devices.ToListAsync();
             SelectList sl = new SelectList(devices, "DeviceID", "Name", "Empty");
-            m.DeviceList = sl;
+            model.DeviceList = sl;
             string searchName = "";
-            if (!string.IsNullOrWhiteSpace(m.Name)) searchName = m.Name;
+            if (!string.IsNullOrWhiteSpace(model.Name)) searchName = model.Name;
             SqlParameter param1 = new SqlParameter("@UserID", usrid);
             SqlParameter param2 = new SqlParameter("@SString", searchName);
             var results = await db.Photos.SqlQuery("[dbo].[sp_SearchPhoto] @UserID,@SString", param1, param2).ToListAsync();
-            m.SearchResults = results;
-            return View("PhotoSearch", m);
+            model.SearchResults = results;
+            return View("PhotoSearch", model);
         }
         [AllowAnonymous]
-        public async Task<ActionResult> AllSearch(PhotoSearchModel m)
+        public async Task<ActionResult> AllSearch(PhotoSearchModel model)
         {
             DateTime? modelTimeFrom = null;
-            if (m.TimeFrom != "")
+            if (!string.IsNullOrWhiteSpace(model.TimeFrom))
             {
                 DateTime timeFrom;
-                if (DateTime.TryParseExact(m.TimeFrom, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeFrom))
+                if (DateTime.TryParseExact(model.TimeFrom, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeFrom))
                 {
                     modelTimeFrom = timeFrom;
                 }
@@ -330,10 +336,10 @@ namespace PhotoLibrary.Controllers
                 }
             }
             DateTime? modelTimeTo = null;
-            if (m.TimeTo != "")
+            if (!string.IsNullOrWhiteSpace(model.TimeTo))
             {
                 DateTime timeTo;
-                if (DateTime.TryParseExact(m.TimeTo, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeTo))
+                if (DateTime.TryParseExact(model.TimeTo, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeTo))
                 {
                     modelTimeTo = timeTo;
                 }
@@ -349,25 +355,33 @@ namespace PhotoLibrary.Controllers
             }
             List<Device> devices = await db.Devices.ToListAsync();
             SelectList sl = new SelectList(devices, "DeviceID", "Name", "Empty");
-            m.DeviceList = sl;
+            model.DeviceList = sl;
             string searchName = "";
-            if (!string.IsNullOrWhiteSpace(m.Name)) searchName = m.Name;
-            List<Photo> results = await (from p in db.Photos
-                                         join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID into pGroup
-                                         from p_ap in pGroup.DefaultIfEmpty()
-                                         where ((p.UserID == usrid) | (p_ap != null)) &
-                                         (p.Name.Contains(searchName)) &
-                                         ((p.TimeTaken >= modelTimeFrom) | (modelTimeFrom == null)) & ((p.TimeTaken <= modelTimeTo) | (modelTimeTo == null)) &
-                                         ((p.Location.Contains(m.Location)) | (m.Location == null) | (m.Location == "")) &
-                                         ((p.DeviceID == m.DeviceID) | (m.DeviceID == 1)) &
-                                         ((p.Focus == m.Focus) | (m.Focus == null)) &
-                                         ((p.Aperture == m.Aperture) | (m.Aperture == null) | (m.Aperture == "")) &
-                                         ((p.Shutter == m.Shutter) | (m.Shutter == null) | (m.Shutter == "")) &
-                                         ((p.ISO == m.ISO) | (m.ISO == null) | (m.ISO == "")) &
-                                         ((p.Flash == m.Flash) | (m.Flash == null))
-                                         select p).Distinct().ToListAsync();
-            m.SearchResults = results;
-            return View("PhotoSearch", m);
+            if (!string.IsNullOrWhiteSpace(model.Name))
+            {
+                searchName = model.Name;
+            }
+            List<Photo> searchResults = new List<Photo>();
+            if (ModelState.IsValid)
+            {
+                searchResults = await (from p in db.Photos
+                                       join ap in db.AlbumsToPhotos on p.PhotoID equals ap.PhotoID into pGroup
+                                       from p_ap in pGroup.DefaultIfEmpty()
+                                       where ((p.UserID == usrid) | (p_ap != null)) &
+                                       (p.Name.Contains(searchName)) &
+                                       ((p.TimeTaken >= modelTimeFrom) | (modelTimeFrom == null)) & 
+                                       ((p.TimeTaken <= modelTimeTo) | (modelTimeTo == null)) &
+                                       ((p.Location.Contains(model.Location)) | (model.Location == null) | (model.Location == "")) &
+                                       ((p.DeviceID == model.DeviceID) | (model.DeviceID == 1)) &
+                                       ((p.Focus == model.Focus) | (model.Focus == null)) &
+                                       ((p.Aperture == model.Aperture) | (model.Aperture == null) | (model.Aperture == "")) &
+                                       ((p.Shutter == model.Shutter) | (model.Shutter == null) | (model.Shutter == "")) &
+                                       ((p.ISO == model.ISO) | (model.ISO == null) | (model.ISO == "")) &
+                                       ((p.Flash == model.Flash) | (model.Flash == null))
+                                       select p).Distinct().ToListAsync();
+            }
+            model.SearchResults = searchResults;
+            return View("PhotoSearch", model);
         }
         [AllowAnonymous]
         public async Task<ActionResult> FastSearch(string photonametosearch)
@@ -377,14 +391,14 @@ namespace PhotoLibrary.Controllers
             {
                 usrid = User.Identity.GetUserId();
             }
-            List<Photo> foundphotos = new List<Photo>();
+            List<Photo> searchResults = new List<Photo>();
             if (!string.IsNullOrWhiteSpace(photonametosearch))
             {
                 SqlParameter param1 = new SqlParameter("@UserID", usrid);
                 SqlParameter param2 = new SqlParameter("@SString", photonametosearch);
-                foundphotos = await db.Photos.SqlQuery("[dbo].[sp_SearchPhoto] @UserID,@SString", param1, param2).ToListAsync();
+                searchResults = await db.Photos.SqlQuery("[dbo].[sp_SearchPhoto] @UserID,@SString", param1, param2).ToListAsync();
             }
-            return PartialView("FastSearch", foundphotos);
+            return PartialView("FastSearch", searchResults);
         }
         protected override void Dispose(bool disposing)
         {

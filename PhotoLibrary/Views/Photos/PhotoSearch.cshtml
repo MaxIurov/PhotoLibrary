@@ -14,7 +14,7 @@
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.TimeFrom, new { htmlAttributes = new { @class = "form-control" } })*@
                 <div class='input-group date' id='datepickertimefrom'>
-                    <input type='text' name='TimeFrom' id='TimeFrom' class="form-control" />
+                    <input type='text' name='TimeFrom' id='TimeFrom' class="form-control text-box single-line" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar">
                         </span>
@@ -27,7 +27,7 @@
             <div class="col-md-10">
                 @*@Html.EditorFor(model => model.TimeTo, new { htmlAttributes = new { @class = "form-control" } })*@
                 <div class='input-group date' id='datepickertimeto'>
-                    <input type='text' name='TimeTo' id='TimeTo' class="form-control" />
+                    <input type='text' name='TimeTo' id='TimeTo' class="form-control text-box single-line" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar">
                         </span>
@@ -110,13 +110,26 @@
         $(function () {
             $('#datepickertimefrom').datetimepicker({
                 viewMode: 'years',
-                format: 'DD.MM.YYYY HH:mm'
+                format: 'DD.MM.YYYY HH:mm',
+                showClear: true,
+                showClose: true
             });
-        });
-        $(function () {
             $('#datepickertimeto').datetimepicker({
+                useCurrent: false,
                 viewMode: 'years',
-                format: 'DD.MM.YYYY HH:mm'
+                format: 'DD.MM.YYYY HH:mm',
+                showClear: true,
+                showClose: true
+            });
+
+            $('#datepickertimefrom').data("DateTimePicker").defaultDate(@Html.Raw(Json.Encode(Model.TimeFrom)));
+            $('#datepickertimeto').data("DateTimePicker").defaultDate(@Html.Raw(Json.Encode(Model.TimeTo)));
+
+            $("#datepickertimefrom").on("dp.change", function (e) {
+                $('#datepickertimeto').data("DateTimePicker").minDate(e.date);
+            });
+            $("#datepickertimeto").on("dp.change", function (e) {
+                $('#datepickertimefrom').data("DateTimePicker").maxDate(e.date);
             });
         });
 </script>

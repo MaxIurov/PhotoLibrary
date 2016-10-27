@@ -7,4 +7,3 @@ C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\BOL.dll
 C:\_MyProjects\PhotoLibrary\BOL3\bin\Debug\BOL.pdb
 C:\_MyProjects\PhotoLibrary\BOL3\obj\Debug\BOL.dll
 C:\_MyProjects\PhotoLibrary\BOL3\obj\Debug\BOL.pdb
-C:\_MyProjects\PhotoLibrary\BOL3\obj\Debug\BOL.csprojResolveAssemblyReference.cache
